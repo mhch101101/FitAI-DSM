@@ -27,7 +27,10 @@ class MainActivity : ComponentActivity() {
 
             FitAITheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    FitAINavigation(navController)
+                    FitAINavigation(
+                        navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                     /*SplashScreen(
                         navController = navController,
                         modifier = Modifier.padding(innerPadding)

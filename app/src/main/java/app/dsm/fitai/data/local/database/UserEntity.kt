@@ -11,12 +11,14 @@ data class UserEntity(
 
     val name: String,
 
+    val lastName: String,
+
     val birthDate: Long,
 
     val sex: String,
 
-    val weight: Float,
+    val weight: Float = 0f,
 
-    val objective: String
+    val objective: String = ""
 
 )

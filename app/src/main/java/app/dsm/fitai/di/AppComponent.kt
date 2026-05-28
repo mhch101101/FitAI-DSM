@@ -1,7 +1,9 @@
 package app.dsm.fitai.di
 
+import android.app.Application
 import app.dsm.fitai.domain.repository.AuthRepository
 import app.dsm.fitai.domain.repository.UserRepository
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
@@ -9,12 +11,18 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AppModule::class,
-        RepositoryModule::class
+        RepositoryModule::class,
+        DatabaseModule::class
     ]
 )
 interface AppComponent {
 
     fun userRepository(): UserRepository
-
     fun authRepository(): AuthRepository
+    @Component.Factory
+    interface Factory {
+        fun create(
+            @BindsInstance app: Application
+        ): AppComponent
+    }
 }

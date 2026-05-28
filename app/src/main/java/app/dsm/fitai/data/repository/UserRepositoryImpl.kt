@@ -9,18 +9,16 @@ import app.dsm.fitai.domain.repository.UserRepository
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-
-    //private val dao: UserDao,
+    private val dao: UserDao,
     //private val firestore: UserFirestore
-
 ) : UserRepository {
 
     override suspend fun getUser(uid: String): User? {
-        /*val local = dao.getUser(uid)
+        val local = dao.getUser(uid)
         if (local != null) {
             return local.toDomain()
         }
-        val remote = firestore.getUser(uid)
+        /*val remote = firestore.getUser(uid)
         if (remote != null) {
             dao.insertUser(remote.toEntity())
             return remote
@@ -28,8 +26,8 @@ class UserRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun saveUser(user: User) {
-        //dao.insertUser(user.toEntity())
+    override suspend fun saveUserProfileInit(user: User) {
+        dao.insertUser(user.toEntity())
         //firestore.createUser(user)
     }
 }

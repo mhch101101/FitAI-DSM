@@ -32,7 +32,8 @@ import com.google.android.gms.common.api.ApiException
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navigateToHome: () -> Unit = {},
-    navigateToRegister: () -> Unit = {}
+    navigateToRegister: () -> Unit = {},
+    navigateToProfileSetup: () -> Unit = {}
 ) {
 
     val appComponent =
@@ -42,11 +43,18 @@ fun LoginScreen(
 
     val viewModel = remember {
         LoginViewModel(
-            authRepository = appComponent.authRepository()
+            authRepository = appComponent.authRepository(),
+            userRepository = appComponent.userRepository()
         )
     }
 
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.isLoggedIn) {
+        if (uiState.isLoggedIn) {
+            if(uiState.isIncompleteProfile)  navigateToProfileSetup() else navigateToHome()
+        }
+    }
 
     // GOOGLE
     val launcher = rememberLauncherForActivityResult(
@@ -58,7 +66,7 @@ fun LoginScreen(
             val account = task.getResult(ApiException::class.java)
             account.idToken?.let {
                 viewModel.onGoogleTokenReceived(it)
-                navigateToHome()
+                //navigateToHome()
             }
         } catch (e: Exception) {
             Log.e("Login", "Google error", e)
@@ -169,7 +177,11 @@ fun LoginScreen(
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp),
             elevation = ButtonDefaults.buttonElevation(6.dp),
-            enabled = !uiState.isLoading
+            enabled = !uiState.isLoading,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF00BFA6),
+                contentColor = Color.White
+            )
         ) {
             if (uiState.isLoading) {
                 CircularProgressIndicator(
@@ -200,7 +212,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ================= GOOGLE BUTTON =================
         OutlinedButton(
             onClick = {
                 val signInIntent = googleSignInClient.signInIntent
@@ -210,7 +221,13 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp),
-            border = ButtonDefaults.outlinedButtonBorder
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color(0xFFF5F7FA), // gris muy suave
+                contentColor = Color.Black
+            ),
+            border = ButtonDefaults.outlinedButtonBorder.copy(
+                brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFE0E0E0))
+            )
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_google),
@@ -224,15 +241,24 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ================= REGISTER =================
         OutlinedButton(
             onClick = { navigateToRegister() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
-            shape = RoundedCornerShape(14.dp)
+            shape = RoundedCornerShape(14.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color.Transparent,
+                contentColor = Color(0xFF00BFA6) // tu color fitness
+            ),
+            border = ButtonDefaults.outlinedButtonBorder.copy(
+                brush = androidx.compose.ui.graphics.SolidColor(Color(0xFF00BFA6))
+            )
         ) {
-            Icon(Icons.Default.PersonAdd, contentDescription = null)
+            Icon(
+                Icons.Default.PersonAdd,
+                contentDescription = null
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text("Crear cuenta nueva")
         }

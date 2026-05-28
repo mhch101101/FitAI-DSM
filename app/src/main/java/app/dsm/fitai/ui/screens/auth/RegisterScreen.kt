@@ -18,7 +18,8 @@ import app.dsm.fitai.viewmodel.RegisterViewModel
 @Composable
 fun RegisterScreen(
     navigateToLogin: () -> Unit = {},
-    navigateToHome: () -> Unit = {}
+    navigateToHome: () -> Unit = {},
+    navigateToProfileSetup: () -> Unit = {}
 ) {
 
     val appComponent = (LocalContext.current.applicationContext as FitAIApp).appComponent
@@ -33,7 +34,7 @@ fun RegisterScreen(
 
     LaunchedEffect(state.isRegistered) {
         if (state.isRegistered) {
-            navigateToHome()
+            navigateToProfileSetup()
         }
     }
 

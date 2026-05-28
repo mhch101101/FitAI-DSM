@@ -44,12 +44,17 @@ class AuthService @Inject constructor(
             }
     }
 
-    fun firebaseAuthWithGoogle(idToken: String, onResult: (Boolean) -> Unit) {
+    fun firebaseAuthWithGoogle(idToken: String, onResult: (String?) -> Unit) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
-                onResult(task.isSuccessful)
+                if (task.isSuccessful) {
+                    val uid = task.result.user?.uid
+                    onResult(uid)
+                } else {
+                    onResult(null)
+                }
             }
     }
 

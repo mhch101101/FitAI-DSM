@@ -15,7 +15,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentUid() = authService.getCurrentUserId()
 
-    override fun loginWithGoogle(idToken: String, onResult: (Boolean) -> Unit) {
+    override fun loginWithGoogle(idToken: String, onResult: (String?) -> Unit) {
         authService.firebaseAuthWithGoogle(idToken, onResult)
     }
     override suspend fun signOut(context: Context) = authService.logout(context)

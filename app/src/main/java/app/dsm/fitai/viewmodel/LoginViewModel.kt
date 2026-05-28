@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.dsm.fitai.domain.repository.AuthRepository
+import app.dsm.fitai.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) :ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -60,13 +62,21 @@ class LoginViewModel @Inject constructor(
                 email = state.email,
                 password = state.password
             )
+            var isIncompleteProfile = false
+
+            if(result.isSuccess){
+                val uuid=result.getOrNull().orEmpty()
+                var user =userRepository.getUser(uuid)
+                isIncompleteProfile = user==null || user.isProfileIncomplete()
+            }
 
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 errorMessage = result.exceptionOrNull()?.let { error ->
                     mapAuthError(error)
                 },
-                isLoggedIn = result.isSuccess
+                isLoggedIn = result.isSuccess,
+                isIncompleteProfile = isIncompleteProfile
             )
         }
     }
@@ -74,11 +84,29 @@ class LoginViewModel @Inject constructor(
     fun onGoogleTokenReceived(idToken: String) {
         _uiState.value = _uiState.value.copy(isLoading = true)
 
-        authRepository.loginWithGoogle(idToken) { success ->
-            _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                errorMessage = if (!success) "Error login Google" else null
-            )
+        authRepository.loginWithGoogle(idToken) { uuid ->
+            if (uuid.isNullOrBlank()) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isLoggedIn = false,
+                    errorMessage = "Error login Google"
+                )
+                return@loginWithGoogle
+            }
+            viewModelScope.launch {
+
+                val user = userRepository.getUser(uuid)
+
+                val isIncompleteProfile =
+                    user == null || user.isProfileIncomplete()
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isLoggedIn = true,
+                    isIncompleteProfile = isIncompleteProfile,
+                    errorMessage = null
+                )
+            }
         }
     }
 
@@ -87,10 +115,11 @@ class LoginViewModel @Inject constructor(
 data class LoginUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val email: String = "",
-    val password: String = "",
+    val email: String = "mois@gmail.com",
+    val password: String = "ahmjhc123456@",
     val isPasswordVisible: Boolean = false,
-    val isLoggedIn: Boolean = false
+    val isLoggedIn: Boolean = false,
+    val isIncompleteProfile: Boolean = false
 )
 
 public fun mapAuthError(error: Throwable): String {

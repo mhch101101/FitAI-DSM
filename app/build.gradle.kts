@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -59,8 +60,8 @@ dependencies {
     implementation("com.google.dagger:dagger:2.56")
     //implementation("com.google.dagger:hilt-android:2.56")
     implementation("com.google.firebase:firebase-firestore")
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
     implementation("androidx.compose.material:material-icons-extended")
     //implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     testImplementation(libs.junit)
@@ -71,6 +72,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     ksp("com.google.dagger:dagger-compiler:2.56")
+    ksp("androidx.room:room-compiler:2.7.2")
     //ksp("com.google.dagger:hilt-compiler:2.56")
-    //ksp("androidx.room:room-compiler:2.6.1")
 }

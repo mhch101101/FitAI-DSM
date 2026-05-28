@@ -1,6 +1,7 @@
 package app.dsm.fitai.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,7 +14,8 @@ import app.dsm.fitai.ui.screens.splash.SplashScreen
 
 @Composable
 fun FitAINavigation(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
 
     NavHost(
@@ -31,14 +33,16 @@ fun FitAINavigation(
         composable(Screen.Login.route) {
             LoginScreen(
                 navigateToHome={navHostController.navigate(Screen.Home.route)},
-                navigateToRegister={navHostController.navigate(Screen.Register.route)}
+                navigateToRegister={navHostController.navigate(Screen.Register.route)},
+                navigateToProfileSetup={navHostController.navigate(Screen.ProfileSetup.route)}
             )
         }
 
         composable(Screen.Register.route) {
             RegisterScreen(
                 navigateToLogin={navHostController.navigate(Screen.Login.route)},
-                navigateToHome={navHostController.navigate(Screen.Home.route)}
+                navigateToHome={navHostController.navigate(Screen.Home.route)},
+                navigateToProfileSetup={navHostController.navigate(Screen.ProfileSetup.route)}
             )
         }
 
@@ -47,7 +51,9 @@ fun FitAINavigation(
         }
 
         composable(Screen.ProfileSetup.route) {
-            ProfileSetupScreen()
+            ProfileSetupScreen(
+                navigateToHome={navHostController.navigate(Screen.Home.route)}
+            )
         }
     }
 }
