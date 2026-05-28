@@ -47,7 +47,9 @@ fun FitAINavigation(
         }
 
         composable(Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(
+                navigateToLogin={navHostController.navigate(Screen.Login.route)},
+            )
         }
 
         composable(Screen.ProfileSetup.route) {

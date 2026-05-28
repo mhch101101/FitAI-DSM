@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val dao: UserDao,
-    //private val firestore: UserFirestore
+    private val firestore: UserFirestore
 ) : UserRepository {
 
     override suspend fun getUser(uid: String): User? {

@@ -14,9 +14,9 @@ object AppModule {
         return FirebaseAuth.getInstance()
     }
 
-    /*@Provides
+    @Provides
     fun provideFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
-    }*/
+    }
 
 }
