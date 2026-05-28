@@ -18,11 +18,13 @@ class AuthRepositoryImpl @Inject constructor(
     override fun loginWithGoogle(idToken: String, onResult: (Boolean) -> Unit) {
         authService.firebaseAuthWithGoogle(idToken, onResult)
     }
-    override fun sendOtp(phoneNumber: String, activity: Activity, onCodeSent: (String) -> Unit, onError: (String) -> Unit){
-        return authService.sendOtp(phoneNumber,activity,onCodeSent,onError)
-    }
-    override fun verifyOtp(verificationId: String, code: String, onResult: (Boolean) -> Unit){
-        return authService.verifyOtp(verificationId,code,onResult)
-    }
     override suspend fun signOut(context: Context) = authService.logout(context)
+
+    override suspend fun loginWithEmail(email: String, password: String): Result<String> {
+        return authService.loginWithEmail(email, password)
+    }
+
+    override suspend fun registerWithEmail(email: String, password: String): Result<String>{
+        return authService.registerWithEmail(email, password)
+    }
 }

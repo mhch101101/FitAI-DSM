@@ -1,10 +1,9 @@
 package app.dsm.fitai.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import app.dsm.fitai.domain.repository.AuthRepository
-import app.dsm.fitai.domain.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +11,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val userRepository: UserRepository,
     private val authRepository: AuthRepository
 ) :ViewModel() {
 
@@ -36,22 +34,40 @@ class LoginViewModel @Inject constructor(
     fun loginWithEmail() {
         val state = _uiState.value
 
+        if (state.email.isBlank()) {
+            _uiState.value = state.copy(
+                errorMessage = "Ingresa tu correo",
+                isLoading = false
+            )
+            return
+        }
+
+        if (state.password.isBlank()) {
+            _uiState.value = state.copy(
+                errorMessage = "Ingresa tu contraseña",
+                isLoading = false
+            )
+            return
+        }
+
         _uiState.value = state.copy(
             isLoading = true,
             errorMessage = null
         )
 
-        CoroutineScope(Dispatchers.IO).launch {
-            /*val result = authRepository.loginWithEmail(
+        viewModelScope.launch {
+            val result = authRepository.loginWithEmail(
                 email = state.email,
                 password = state.password
             )
 
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
-                errorMessage = result.exceptionOrNull()?.message,
+                errorMessage = result.exceptionOrNull()?.let { error ->
+                    mapAuthError(error)
+                },
                 isLoggedIn = result.isSuccess
-            )*/
+            )
         }
     }
 
@@ -76,3 +92,31 @@ data class LoginUiState(
     val isPasswordVisible: Boolean = false,
     val isLoggedIn: Boolean = false
 )
+
+public fun mapAuthError(error: Throwable): String {
+    val code = (error as? com.google.firebase.auth.FirebaseAuthException)?.errorCode
+    Log.d("code--",code.toString())
+    return when (code) {
+
+        "ERROR_USER_NOT_FOUND" ->
+            "El correo no está registrado"
+
+        "ERROR_WRONG_PASSWORD" ->
+            "Contraseña incorrecta"
+
+        "ERROR_INVALID_EMAIL" ->
+            "Correo inválido"
+
+        "ERROR_NETWORK_REQUEST_FAILED" ->
+            "Error de conexión"
+
+        "ERROR_EMAIL_ALREADY_IN_USE" ->
+            "Este correo ya está registrado"
+
+        "ERROR_INVALID_CREDENTIAL" ->
+            "Credenciales inválidas"
+
+        else ->
+            "Error al iniciar sesión"
+    }
+}

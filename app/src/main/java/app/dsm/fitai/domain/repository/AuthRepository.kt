@@ -7,7 +7,7 @@ interface AuthRepository {
     suspend fun hasSession(): Boolean
     suspend fun getCurrentUid(): String?
     fun loginWithGoogle(idToken: String, onResult: (Boolean) -> Unit)
-    fun sendOtp(phoneNumber: String, activity: Activity, onCodeSent: (String) -> Unit, onError: (String) -> Unit)
-    fun verifyOtp(verificationId: String, code: String, onResult: (Boolean) -> Unit)
     suspend fun signOut(context: Context)
+    suspend fun loginWithEmail(email: String, password: String): Result<String>
+    suspend fun registerWithEmail(email: String, password: String): Result<String>
 }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import app.dsm.fitai.ui.screens.auth.LoginScreen
+import app.dsm.fitai.ui.screens.auth.RegisterScreen
 import app.dsm.fitai.ui.screens.home.HomeScreen
 import app.dsm.fitai.ui.screens.onboarding.ProfileSetupScreen
 import app.dsm.fitai.ui.screens.splash.SplashScreen
@@ -29,6 +30,14 @@ fun FitAINavigation(
 
         composable(Screen.Login.route) {
             LoginScreen(
+                navigateToHome={navHostController.navigate(Screen.Home.route)},
+                navigateToRegister={navHostController.navigate(Screen.Register.route)}
+            )
+        }
+
+        composable(Screen.Register.route) {
+            RegisterScreen(
+                navigateToLogin={navHostController.navigate(Screen.Login.route)},
                 navigateToHome={navHostController.navigate(Screen.Home.route)}
             )
         }

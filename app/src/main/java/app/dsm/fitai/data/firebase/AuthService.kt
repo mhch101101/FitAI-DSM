@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit
 
 class AuthService @Inject constructor(
     private val firebaseAuth: FirebaseAuth
-    //private val googleSignInClient: GoogleSignInClient
 ) {
 
     fun hasSession(): Boolean {
@@ -54,49 +53,35 @@ class AuthService @Inject constructor(
             }
     }
 
-    fun sendOtp(
-        phoneNumber: String,
-        activity: Activity,
-        onCodeSent: (String) -> Unit,
-        onError: (String) -> Unit
-    ) {
-        val options = PhoneAuthOptions.newBuilder(firebaseAuth)
-            .setPhoneNumber(phoneNumber)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(activity)
-            .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    suspend fun loginWithEmail(email: String, password: String): Result<String> {
+        return try {
+            val result = firebaseAuth
+                .signInWithEmailAndPassword(email, password)
+                .await()
 
-                override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                    firebaseAuth.signInWithCredential(credential)
-                }
-
-                override fun onVerificationFailed(e: FirebaseException) {
-                    onError(e.message ?: "Error")
-                }
-
-                override fun onCodeSent(
-                    verificationId: String,
-                    token: PhoneAuthProvider.ForceResendingToken
-                ) {
-                    onCodeSent(verificationId)
-                }
-            })
-            .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
+            Result.success(result.user?.uid ?: "")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    fun verifyOtp(
-        verificationId: String,
-        code: String,
-        onResult: (Boolean) -> Unit
-    ) {
+    suspend fun registerWithEmail(
+        email: String,
+        password: String
+    ): Result<String> {
+        return try {
 
-        val credential = PhoneAuthProvider.getCredential(verificationId, code)
+            val result = firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .await()
 
-        firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener {
-                onResult(it.isSuccessful)
-            }
+            val uid = result.user?.uid ?: throw Exception("UID no encontrado")
+
+            Result.success(uid)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
 }
