@@ -12,7 +12,10 @@ fun UserEntity.toDomain(): User {
         birthDate = birthDate,
         sex = sex,
         weight = weight,
-        objective = objective
+        objective = objective,
+        level = level,
+        trainingFrequency = trainingFrequency,
+        trainingDuration = trainingDuration
     )
 }
 
@@ -24,6 +27,9 @@ fun User.toEntity(): UserEntity {
         birthDate = birthDate,
         sex = sex,
         weight = weight ,
-        objective = objective
+        objective = objective,
+        level = level,
+        trainingFrequency = trainingFrequency,
+        trainingDuration = trainingDuration
     )
 }
