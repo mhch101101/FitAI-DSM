@@ -9,18 +9,24 @@ data class UserEntity(
     @PrimaryKey
     val uid: String,
 
-    var name: String,
+    val name: String,
 
-    var lastName: String,
+    val lastName: String,
 
-    var birthDate: Long,
+    val birthDate: Long,
 
-    var sex: String,
+    val sex: String,
 
-    var weight: Float = 0f,
+    val weight: Float = 0f,
 
     var objective: String = "",
 
-    val syncPending:Boolean = true
+    val syncPending:Boolean = true,
+
+    val level: String = "",
+
+    val trainingFrequency: Int = 0,
+
+    val trainingDuration: Int = 0
 
 )

@@ -36,8 +36,24 @@ class ProfileSetupViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(gender = value)
     }
 
+    fun onWeightChange(value: String) {
+        _uiState.value = _uiState.value.copy(weight = value)
+    }
+
     fun onObjectiveChange(value: String) {
         _uiState.value = _uiState.value.copy(selectedObjective = value)
+    }
+
+    fun onLevelChange(value: String) {
+        _uiState.value = _uiState.value.copy(selectedLevel = value)
+    }
+
+    fun onFrequencyChange(value: Int) {
+        _uiState.value = _uiState.value.copy(trainingFrequency = value)
+    }
+
+    fun onDurationChange(value: Int) {
+        _uiState.value = _uiState.value.copy(trainingDuration = value)
     }
 
     fun onBirthDateSelected(value: Long) {
@@ -49,7 +65,7 @@ class ProfileSetupViewModel @Inject constructor(
 
     fun nextStep() {
         val current = _uiState.value.currentStep
-        if (current < 2) {
+        if (current < 3) {
             _uiState.value = _uiState.value.copy(currentStep = current + 1)
         }
     }
@@ -68,11 +84,16 @@ class ProfileSetupViewModel @Inject constructor(
 
     fun saveProfile() {
         val state = _uiState.value
+        val weightValue = state.weight.toFloatOrNull() ?: 0f
         if (state.firstName.isBlank() ||
             state.lastName.isBlank() ||
             state.birthDate == 0L ||
             state.gender.isBlank() ||
-            state.selectedObjective.isBlank()
+            weightValue <= 0f ||
+            state.selectedObjective.isBlank() ||
+            state.selectedLevel.isBlank() ||
+            state.trainingFrequency == 0 ||
+            state.trainingDuration == 0
         ) {
             _uiState.value = state.copy(error = "Todos los campos son obligatorios")
             return
@@ -88,7 +109,11 @@ class ProfileSetupViewModel @Inject constructor(
                         lastName = state.lastName,
                         birthDate = state.birthDate,
                         sex = state.gender,
-                        objective = state.selectedObjective
+                        weight = weightValue,
+                        objective = state.selectedObjective,
+                        level = state.selectedLevel,
+                        trainingFrequency = state.trainingFrequency,
+                        trainingDuration = state.trainingDuration
                     )
                 )
                 _uiState.value = _uiState.value.copy(
@@ -113,7 +138,11 @@ data class ProfileSetupUiState(
     val birthDate: Long = 0L,
     val birthDateText: String = "",
     val gender: String = "",
+    val weight: String = "",
     val selectedObjective: String = "",
+    val selectedLevel: String = "",
+    val trainingFrequency: Int = 0,
+    val trainingDuration: Int = 0,
     val isLoading: Boolean = false,
     val error: String? = null,
     val isCompleted: Boolean = false

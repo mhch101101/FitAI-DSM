@@ -5,18 +5,9 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import app.dsm.fitai.di.FitAIApp
-import app.dsm.fitai.viewmodel.ProfileSetupViewModel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,33 +15,47 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import app.dsm.fitai.R
+import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.ui.theme.FitAITheme
 import app.dsm.fitai.viewmodel.ProfileSetupUiState
+import app.dsm.fitai.viewmodel.ProfileSetupViewModel
 
 @Composable
 fun ProfileSetupScreen(
@@ -83,7 +88,11 @@ fun ProfileSetupScreen(
         onFirstNameChange = viewModel::onFirstNameChange,
         onLastNameChange = viewModel::onLastNameChange,
         onGenderChange = viewModel::onGenderChange,
+        onWeightChange = viewModel::onWeightChange,
         onObjectiveChange = viewModel::onObjectiveChange,
+        onLevelChange = viewModel::onLevelChange,
+        onFrequencyChange = viewModel::onFrequencyChange,
+        onDurationChange = viewModel::onDurationChange,
         onBirthDateSelected = viewModel::onBirthDateSelected,
         onNextStep = viewModel::nextStep,
         onPreviousStep = viewModel::previousStep,
@@ -98,7 +107,11 @@ fun ProfileSetupContent(
     onFirstNameChange: (String) -> Unit = {},
     onLastNameChange: (String) -> Unit = {},
     onGenderChange: (String) -> Unit = {},
+    onWeightChange: (String) -> Unit = {},
     onObjectiveChange: (String) -> Unit = {},
+    onLevelChange: (String) -> Unit = {},
+    onFrequencyChange: (Int) -> Unit = {},
+    onDurationChange: (Int) -> Unit = {},
     onBirthDateSelected: (Long) -> Unit = {},
     onNextStep: () -> Unit = {},
     onPreviousStep: () -> Unit = {},
@@ -116,7 +129,7 @@ fun ProfileSetupContent(
         Spacer(Modifier.height(40.dp))
 
         LinearProgressIndicator(
-            progress = { state.currentStep / 2f },
+            progress = { state.currentStep / 3f },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp),
@@ -128,7 +141,7 @@ fun ProfileSetupContent(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "Paso ${state.currentStep} de 2",
+            text = "Paso ${state.currentStep} de 3",
             style = MaterialTheme.typography.labelLarge,
             color = Color.Gray,
             modifier = Modifier.fillMaxWidth(),
@@ -152,6 +165,7 @@ fun ProfileSetupContent(
                         onFirstNameChange = onFirstNameChange,
                         onLastNameChange = onLastNameChange,
                         onGenderChange = onGenderChange,
+                        onWeightChange = onWeightChange,
                         onBirthDateSelected = onBirthDateSelected,
                         context = context,
                         primary = primary,
@@ -161,6 +175,14 @@ fun ProfileSetupContent(
                         state = state,
                         onObjectiveChange = onObjectiveChange,
                         primary = primary
+                    )
+                    3 -> StepConfiguration(
+                        state = state,
+                        onLevelChange = onLevelChange,
+                        onFrequencyChange = onFrequencyChange,
+                        onDurationChange = onDurationChange,
+                        primary = primary,
+                        unselectedSurface = unselectedSurface
                     )
                 }
             }
@@ -190,7 +212,7 @@ fun ProfileSetupContent(
             }
 
             Button(
-                onClick = { if (state.currentStep < 2) onNextStep() else onSaveProfile() },
+                onClick = { if (state.currentStep < 3) onNextStep() else onSaveProfile() },
                 modifier = Modifier
                     .height(52.dp)
                     .weight(1f),
@@ -201,9 +223,9 @@ fun ProfileSetupContent(
                 if (state.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White)
                 } else {
-                    val text = if (state.currentStep < 2) "Continuar" else "Finalizar"
+                    val text = if (state.currentStep < 3) "Continuar" else "Finalizar"
                     Text(text, fontWeight = FontWeight.Bold)
-                    if (state.currentStep < 2) {
+                    if (state.currentStep < 3) {
                         Spacer(Modifier.size(8.dp))
                         Icon(Icons.AutoMirrored.Filled.ArrowForward, null)
                     }
@@ -219,6 +241,7 @@ fun StepPersonalData(
     onFirstNameChange: (String) -> Unit,
     onLastNameChange: (String) -> Unit,
     onGenderChange: (String) -> Unit,
+    onWeightChange: (String) -> Unit,
     onBirthDateSelected: (Long) -> Unit,
     context: android.content.Context?,
     primary: Color,
@@ -249,6 +272,19 @@ fun StepPersonalData(
             label = { Text("Apellidos") },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp)
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        OutlinedTextField(
+            value = state.weight,
+            onValueChange = onWeightChange,
+            label = { Text("Peso (kg)") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(14.dp),
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal
+            )
         )
 
         Spacer(Modifier.height(16.dp))
@@ -416,6 +452,115 @@ fun StepObjective(
     }
 }
 
+@Composable
+fun StepConfiguration(
+    state: ProfileSetupUiState,
+    onLevelChange: (String) -> Unit,
+    onFrequencyChange: (Int) -> Unit,
+    onDurationChange: (Int) -> Unit,
+    primary: Color,
+    unselectedSurface: Color
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Configuración",
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontWeight = FontWeight.Bold,
+                color = primary
+            )
+        )
+        Text(
+            text = "Ajusta tu plan según tu disponibilidad.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray
+        )
+        Spacer(Modifier.height(32.dp))
+
+        // Nivel de experiencia
+        Text("Nivel de experiencia", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            listOf("Principiante", "Intermedio", "Avanzado").forEach { level ->
+                val isSelected = state.selectedLevel == level
+                Button(
+                    onClick = { onLevelChange(level) },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) primary else unselectedSurface,
+                        contentColor = if (isSelected) Color.White else Color.Black
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text(level, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                }
+            }
+        }
+
+        Spacer(Modifier.height(32.dp))
+
+        // Días por semana
+        Text("Días por semana", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Text("¿Cuántos días planeas entrenar?", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Spacer(Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            (3..6).forEach { day ->
+                val isSelected = state.trainingFrequency == day
+                Button(
+                    onClick = { onFrequencyChange(day) },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) primary else unselectedSurface,
+                        contentColor = if (isSelected) Color.White else Color.Black
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("$day días", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                }
+            }
+        }
+
+        Spacer(Modifier.height(32.dp))
+
+        // Duración de sesión
+        Text("Duración de sesión", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Text("Tiempo promedio por entrenamiento.", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Spacer(Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            listOf(45, 60, 90).forEach { mins ->
+                val isSelected = state.trainingDuration == mins
+                Button(
+                    onClick = { onDurationChange(mins) },
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) primary else unselectedSurface,
+                        contentColor = if (isSelected) Color.White else Color.Black
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("$mins min", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                }
+            }
+        }
+
+        state.error?.let {
+            Spacer(Modifier.height(16.dp))
+            Text(it, color = Color.Red, style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+}
+
 @Preview(showBackground = true, name = "Paso 1 - Datos Personales")
 @Composable
 fun ProfileSetupStep1Preview() {
@@ -456,15 +601,17 @@ fun ProfileSetupStep2Preview() {
     }
 }
 
-//@Preview(showBackground = true, name = "Estado de Carga")
-//@Composable
-//fun ProfileSetupLoadingPreview() {
-//    FitAITheme {
-//        ProfileSetupContent(
-//            state = ProfileSetupUiState(
-//                currentStep = 2,
-//                isLoading = true
-//            )
-//        )
-//    }
-//}
+@Preview(showBackground = true, name = "Paso 3 - Configuración")
+@Composable
+fun ProfileSetupStep3Preview() {
+    FitAITheme {
+        ProfileSetupContent(
+            state = ProfileSetupUiState(
+                currentStep = 3,
+                selectedLevel = "Intermedio",
+                trainingFrequency = 4,
+                trainingDuration = 60
+            )
+        )
+    }
+}

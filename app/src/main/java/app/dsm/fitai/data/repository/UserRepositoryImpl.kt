@@ -30,33 +30,22 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveUserProfile(user: User): Boolean {
-        try {
-            var local = dao.getUser(user.uid)
-            if(local==null){
-                local= UserEntity(
-                    uid = user.uid,
-                    name = user.name,
-                    lastName = user.lastName,
-                    sex = user.sex,
-                    birthDate = user.birthDate
-                )
-                dao.insertUser(local)
-            }else{
-                local.name=user.name
-                local.lastName =user.lastName
-                local.sex=user.sex
-                local.birthDate=user.birthDate
-                dao.updateUser(local)
-            }
-            return true;
-        }catch (e: Exception){
-            return false
+        return try {
+            dao.insertUser(user.toEntity(isSyncPending = true))
+            true
+        } catch (e: Exception) {
+            Log.e("UserRepository", "Error saving profile", e)
+            false
         }
     }
 
     override suspend fun saveUserProfileInit(user: User) {
-        dao.insertUser(user.toEntity())
-        if (firestore.userExists(user.uid)) firestore.updateUser(user) else firestore.createUser(user)
+        dao.insertUser(user.toEntity(isSyncPending = true))
+        if (firestore.userExists(user.uid)) {
+            firestore.updateUser(user)
+        } else {
+            firestore.createUser(user)
+        }
     }
 
 }
