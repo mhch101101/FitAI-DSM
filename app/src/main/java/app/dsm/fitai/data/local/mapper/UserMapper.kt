@@ -19,17 +19,18 @@ fun UserEntity.toDomain(): User {
     )
 }
 
-fun User.toEntity(): UserEntity {
+fun User.toEntity(isSyncPending: Boolean = true): UserEntity {
     return UserEntity(
         uid = uid,
         name = name,
         lastName = lastName,
         birthDate = birthDate,
         sex = sex,
-        weight = weight ,
+        weight = weight,
         objective = objective,
         level = level,
         trainingFrequency = trainingFrequency,
-        trainingDuration = trainingDuration
+        trainingDuration = trainingDuration,
+        syncPending = isSyncPending
     )
 }
