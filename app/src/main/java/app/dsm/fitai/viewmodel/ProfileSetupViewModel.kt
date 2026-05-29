@@ -36,6 +36,10 @@ class ProfileSetupViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(gender = value)
     }
 
+    fun onWeightChange(value: String) {
+        _uiState.value = _uiState.value.copy(weight = value)
+    }
+
     fun onObjectiveChange(value: String) {
         _uiState.value = _uiState.value.copy(selectedObjective = value)
     }
@@ -80,10 +84,12 @@ class ProfileSetupViewModel @Inject constructor(
 
     fun saveProfile() {
         val state = _uiState.value
+        val weightValue = state.weight.toFloatOrNull() ?: 0f
         if (state.firstName.isBlank() ||
             state.lastName.isBlank() ||
             state.birthDate == 0L ||
             state.gender.isBlank() ||
+            weightValue <= 0f ||
             state.selectedObjective.isBlank() ||
             state.selectedLevel.isBlank() ||
             state.trainingFrequency == 0 ||
@@ -103,6 +109,7 @@ class ProfileSetupViewModel @Inject constructor(
                         lastName = state.lastName,
                         birthDate = state.birthDate,
                         sex = state.gender,
+                        weight = weightValue,
                         objective = state.selectedObjective,
                         level = state.selectedLevel,
                         trainingFrequency = state.trainingFrequency,
@@ -131,6 +138,7 @@ data class ProfileSetupUiState(
     val birthDate: Long = 0L,
     val birthDateText: String = "",
     val gender: String = "",
+    val weight: String = "",
     val selectedObjective: String = "",
     val selectedLevel: String = "",
     val trainingFrequency: Int = 0,

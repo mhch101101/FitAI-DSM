@@ -21,6 +21,7 @@ data class User(
                 lastName.isBlank() ||
                 birthDate == 0L ||
                 sex.isBlank() ||
+                weight <= 0f ||
                 objective.isBlank() ||
                 level.isBlank() ||
                 trainingFrequency == 0 ||
