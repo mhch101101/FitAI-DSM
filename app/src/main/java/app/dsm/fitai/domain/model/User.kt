@@ -17,6 +17,7 @@ data class User(
         return name.isBlank() ||
                 lastName.isBlank() ||
                 birthDate == 0L ||
-                sex.isBlank()
+                sex.isBlank() ||
+                objective.isBlank()
     }
 }

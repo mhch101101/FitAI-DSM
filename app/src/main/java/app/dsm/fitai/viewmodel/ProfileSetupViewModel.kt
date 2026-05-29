@@ -36,11 +36,29 @@ class ProfileSetupViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(gender = value)
     }
 
+    fun onObjectiveChange(value: String) {
+        _uiState.value = _uiState.value.copy(selectedObjective = value)
+    }
+
     fun onBirthDateSelected(value: Long) {
         _uiState.value = _uiState.value.copy(
             birthDate = value,
             birthDateText = formatDate(value)
         )
+    }
+
+    fun nextStep() {
+        val current = _uiState.value.currentStep
+        if (current < 2) {
+            _uiState.value = _uiState.value.copy(currentStep = current + 1)
+        }
+    }
+
+    fun previousStep() {
+        val current = _uiState.value.currentStep
+        if (current > 1) {
+            _uiState.value = _uiState.value.copy(currentStep = current - 1)
+        }
     }
 
     private fun formatDate(time: Long): String {
@@ -53,7 +71,8 @@ class ProfileSetupViewModel @Inject constructor(
         if (state.firstName.isBlank() ||
             state.lastName.isBlank() ||
             state.birthDate == 0L ||
-            state.gender.isBlank()
+            state.gender.isBlank() ||
+            state.selectedObjective.isBlank()
         ) {
             _uiState.value = state.copy(error = "Todos los campos son obligatorios")
             return
@@ -69,6 +88,7 @@ class ProfileSetupViewModel @Inject constructor(
                         lastName = state.lastName,
                         birthDate = state.birthDate,
                         sex = state.gender,
+                        objective = state.selectedObjective
                     )
                 )
                 _uiState.value = _uiState.value.copy(
@@ -87,11 +107,13 @@ class ProfileSetupViewModel @Inject constructor(
 }
 
 data class ProfileSetupUiState(
+    val currentStep: Int = 1,
     val firstName: String = "",
     val lastName: String = "",
     val birthDate: Long = 0L,
     val birthDateText: String = "",
     val gender: String = "",
+    val selectedObjective: String = "",
     val isLoading: Boolean = false,
     val error: String? = null,
     val isCompleted: Boolean = false
