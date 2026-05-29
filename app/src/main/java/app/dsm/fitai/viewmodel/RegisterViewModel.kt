@@ -41,7 +41,6 @@ class RegisterViewModel @Inject constructor(
     fun register() {
         val state = _uiState.value
 
-        // VALIDACIONES
         if (state.email.isBlank()) {
             _uiState.value = state.copy(error = "Ingresa tu correo")
             return

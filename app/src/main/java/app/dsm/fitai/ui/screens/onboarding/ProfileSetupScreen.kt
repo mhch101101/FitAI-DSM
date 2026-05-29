@@ -105,7 +105,7 @@ fun ProfileSetupContent(
     onSaveProfile: () -> Unit = {},
     context: android.content.Context? = null
 ) {
-    val primary = Color(0xFF00BFA6) // 🔥 teal fitness
+    val primary = Color(0xFF00BFA6)
     val unselectedSurface = Color(0xFFE6E8EC)
 
     Column(
@@ -115,7 +115,6 @@ fun ProfileSetupContent(
     ) {
         Spacer(Modifier.height(40.dp))
 
-        // Barra de progreso (HU-2: Visualización de avance)
         LinearProgressIndicator(
             progress = { state.currentStep / 2f },
             modifier = Modifier
@@ -167,7 +166,6 @@ fun ProfileSetupContent(
             }
         }
 
-        // Navegación inferior
         Row(
             modifier = Modifier
                 .fillMaxWidth()

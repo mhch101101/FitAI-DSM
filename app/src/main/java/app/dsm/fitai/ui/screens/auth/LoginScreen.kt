@@ -215,7 +215,7 @@ fun LoginScreen(
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color(0xFFF5F7FA), // gris muy suave
+                containerColor = Color(0xFFF5F7FA),
                 contentColor = Color.Black
             ),
             border = ButtonDefaults.outlinedButtonBorder.copy(
@@ -242,7 +242,7 @@ fun LoginScreen(
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 containerColor = Color.Transparent,
-                contentColor = Color(0xFF00BFA6) // tu color fitness
+                contentColor = Color(0xFF00BFA6)
             ),
             border = ButtonDefaults.outlinedButtonBorder.copy(
                 brush = androidx.compose.ui.graphics.SolidColor(Color(0xFF00BFA6))
