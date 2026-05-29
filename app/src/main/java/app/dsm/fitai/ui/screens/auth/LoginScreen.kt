@@ -90,7 +90,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "FitAI",
+            text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp
@@ -98,7 +98,7 @@ fun LoginScreen(
         )
 
         Text(
-            text = "Entrena más inteligente con IA.",
+            text = stringResource(R.string.login_subtitle),
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = Color.Gray,
                 letterSpacing = 0.5.sp
@@ -118,7 +118,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = uiState.email,
             onValueChange = viewModel::onEmailChanged,
-            label = { Text("Correo") },
+            label = { Text(stringResource(R.string.login_email_label)) },
             leadingIcon = {
                 Icon(Icons.Default.Email, contentDescription = null)
             },
@@ -131,7 +131,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = uiState.password,
             onValueChange = viewModel::onPasswordChanged,
-            label = { Text("Contraseña") },
+            label = { Text(stringResource(R.string.login_password_label)) },
             leadingIcon = {
                 Icon(Icons.Default.Lock, contentDescription = null)
             },
@@ -185,7 +185,7 @@ fun LoginScreen(
             } else {
                 Icon(Icons.Default.Login, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Iniciar sesión")
+                Text(stringResource(R.string.login_button))
             }
         }
 
@@ -197,7 +197,7 @@ fun LoginScreen(
         ) {
             Divider(modifier = Modifier.weight(1f))
             Text(
-                text = "  o  ",
+                text = "  ${stringResource(R.string.login_divider_or)}  ",
                 color = Color.Gray
             )
             Divider(modifier = Modifier.weight(1f))
@@ -229,7 +229,7 @@ fun LoginScreen(
             )
 
             Spacer(modifier = Modifier.width(10.dp))
-            Text("Continuar con Google")
+            Text(stringResource(R.string.login_google_button))
         }
 
         Spacer(modifier = Modifier.height(18.dp))
@@ -253,13 +253,13 @@ fun LoginScreen(
                 contentDescription = null
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Crear cuenta nueva")
+            Text(stringResource(R.string.login_register_button))
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Entrena. Registra. Mejora.",
+            text = stringResource(R.string.login_footer),
             style = MaterialTheme.typography.labelMedium,
             color = Color.Gray
         )

@@ -1,4 +1,95 @@
 <resources>
     <string name="app_name">FitAI</string>
     <string name="default_web_client_id">1234567890-abcxyz.apps.googleusercontent.com</string>
+
+    <!-- Login -->
+    <string name="login_subtitle">Entrena más inteligente con IA.</string>
+    <string name="login_email_label">Correo</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="login_google_button">Continuar con Google</string>
+    <string name="login_register_button">Crear cuenta nueva</string>
+    <string name="login_footer">Entrena. Registra. Mejora.</string>
+    <string name="login_divider_or">o</string>
+
+    <!-- Register -->
+    <string name="register_title">Únete a FitAI</string>
+    <string name="register_subtitle">Crea tu cuenta y empieza a entrenar inteligente</string>
+    <string name="register_email_label">Correo</string>
+    <string name="register_password_label">Contraseña</string>
+    <string name="register_confirm_password_label">Confirmar contraseña</string>
+    <string name="register_button">Crear cuenta</string>
+    <string name="register_login_button">Ya tengo cuenta</string>
+
+    <!-- Home -->
+    <string name="home_empty_title">Hoy es un gran día</string>
+    <string name="home_empty_description">Crea tu rutina con IA y mejora tu rendimiento</string>
+    <string name="home_create_routine">Crear Rutina</string>
+    <string name="home_footer">IA personalizada en segundos</string>
+    <string name="home_objective_label">Objetivo: %1$s</string>
+    <string name="home_suggested_weight">Peso sugerido: %1$.1f kg</string>
+    <string name="home_exercise_detail">%1$s • %2$d series x %3$s</string>
+    <string name="home_rest_time">%1$d s</string>
+
+    <!-- Profile Setup -->
+    <string name="profile_step_indicator">Paso %1$d de 3</string>
+    <string name="profile_back">Atrás</string>
+    <string name="profile_continue">Continuar</string>
+    <string name="profile_finish">Finalizar</string>
+
+    <string name="profile_personal_data_title">Datos Personales</string>
+    <string name="profile_personal_data_subtitle">Cuéntanos un poco sobre ti.</string>
+    <string name="profile_first_name">Nombres</string>
+    <string name="profile_last_name">Apellidos</string>
+    <string name="profile_weight">Peso (kg)</string>
+    <string name="profile_gender_label">Sexo</string>
+    <string name="profile_gender_male">Masculino</string>
+    <string name="profile_gender_female">Femenino</string>
+    <string name="profile_birth_date_label">Fecha de nacimiento</string>
+    <string name="profile_birth_date_placeholder">Selecciona tu fecha</string>
+
+    <string name="profile_objective_title">¿Cuál es tu objetivo?</string>
+    <string name="profile_objective_subtitle">Selecciona una opción para personalizar tu plan.</string>
+    <string name="profile_objective_hypertrophy">Hipertrofia</string>
+    <string name="profile_objective_strength">Fuerza</string>
+    <string name="profile_objective_mixed">Mixto</string>
+    <string name="profile_objective_hypertrophy_desc">Enfoque en el crecimiento muscular estético y densidad mediante volumen optimizado.</string>
+    <string name="profile_objective_strength_desc">Incrementa tu potencia máxima y fuerza mediante la capacidad de carga en ejercicios multiarticulares.</string>
+    <string name="profile_objective_mixed_desc">Equilibrio perfecto entre desarrollo muscular, fuerza y rendimiento en el entrenamiento cardiovascular.</string>
+
+    <string name="profile_config_title">Configuración</string>
+    <string name="profile_config_subtitle">Ajusta tu plan según tu disponibilidad.</string>
+    <string name="profile_experience_level">Nivel de experiencia</string>
+    <string name="profile_level_beginner">Principiante</string>
+    <string name="profile_level_intermediate">Intermedio</string>
+    <string name="profile_level_advanced">Avanzado</string>
+    <string name="profile_days_per_week">Días por semana</string>
+    <string name="profile_days_per_week_subtitle">¿Cuántos días planeas entrenar?</string>
+    <string name="profile_days_count">%1$d días</string>
+    <string name="profile_session_duration">Duración de sesión</string>
+    <string name="profile_session_duration_subtitle">Tiempo promedio por entrenamiento.</string>
+    <string name="profile_session_minutes">%1$d min</string>
+    <string name="profile_error_generic">Error al guardar perfil</string>
+    <string name="profile_error_required">Todos los campos son obligatorios</string>
+
+    <!-- Layout -->
+    <string name="layout_welcome_user">Bienvenido, %1$s</string>
+    <string name="layout_default_user">Usuario</string>
+    <string name="layout_edit_profile_desc">Editar perfil</string>
+    <string name="layout_logout_desc">Salir</string>
+    <string name="layout_steps_today">Pasos de hoy</string>
+    <string name="layout_steps_goal_label">Meta</string>
+    <string name="layout_steps_completion">%1$d%% completado</string>
+    <string name="layout_logout_title">Cerrar sesión</string>
+    <string name="layout_logout_message">¿Quieres salir de FitAI? Tu progreso seguirá guardado.</string>
+    <string name="layout_logout_confirm">Salir</string>
+    <string name="layout_logout_cancel">Cancelar</string>
+
+    <!-- Profile Edit -->
+    <string name="profile_edit_title">Editar Perfil</string>
+    <string name="profile_edit_subtitle">Actualiza tu información personal y fitness.</string>
+    <string name="profile_edit_success_title">Perfil actualizado</string>
+    <string name="profile_edit_success_message">Tus datos se guardaron correctamente y ya están disponibles en tu perfil.</string>
+    <string name="profile_edit_cancel">Cancelar</string>
+    <string name="profile_edit_save">Guardar</string>
 </resources>
