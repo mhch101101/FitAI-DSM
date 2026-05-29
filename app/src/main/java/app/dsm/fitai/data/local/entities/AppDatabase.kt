@@ -7,7 +7,7 @@ import app.dsm.fitai.data.local.database.UserEntity
 
 @Database(
     entities = [UserEntity::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
 

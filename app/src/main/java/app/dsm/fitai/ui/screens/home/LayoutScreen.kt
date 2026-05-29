@@ -2,15 +2,20 @@ package app.dsm.fitai.ui.screens.home
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.viewmodel.LayoutViewModel
 
@@ -21,6 +26,7 @@ fun LayoutScreen(
     context: Context,
     showStepsCard: Boolean = true,
     navigateToLogin: () -> Unit = {},
+    navigateToProfileEdit: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
 
@@ -35,6 +41,7 @@ fun LayoutScreen(
     }
 
     val logoutEvent by viewModel.logoutEvent.collectAsState()
+    val userName by viewModel.userName.collectAsState()
     LaunchedEffect(logoutEvent) {
         if (logoutEvent) navigateToLogin()
     }
@@ -58,34 +65,26 @@ fun LayoutScreen(
                 title = {
                     Column {
                         Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleLarge
+                            text = "Bienvenido, ${if (userName.isBlank()) "Usuario" else userName}",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
                         )
+
                         Text(
-                            text = "Actívate hoy",
-                            style = MaterialTheme.typography.labelSmall
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = Color.White
                         )
                     }
                 },
                 actions = {
 
-                    BadgedBox(
-                        badge = {
-                            if (notificationsCount > 0) {
-                                Badge(
-                                    containerColor = Color(0xFF4CAF50)
-                                ) {
-                                    Text(notificationsCount.toString())
-                                }
-                            }
-                        }
-                    ) {
-                        IconButton(onClick = { }) {
-                            Icon(
-                                Icons.Default.Notifications,
-                                contentDescription = "Notificaciones"
-                            )
-                        }
+                    IconButton(onClick = {navigateToProfileEdit()}) {
+                        Icon(
+                            Icons.Default.AccountCircle,
+                            contentDescription = "Editar perfil",
+                            modifier = Modifier.size(32.dp)
+                        )
                     }
 
                     IconButton(onClick = { showLogoutDialog = true }) {
@@ -117,68 +116,98 @@ fun LayoutScreen(
             if (showStepsCard) {
 
                 Card(
-                    shape = MaterialTheme.shapes.extraLarge,
+                    shape = RoundedCornerShape(26.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF1B5E20).copy(alpha = 0.15f)
+                        containerColor = Color(0xFF1B5E20).copy(alpha = 0.12f)
                     ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    Column(modifier = Modifier.padding(20.dp)) {
+                    Column(
+                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp)
+                    ) {
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
 
-                            Column {
-                                Text(
-                                    "🔥 Pasos de hoy",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer
-                                )
-
-                                Spacer(Modifier.height(6.dp))
+                            Row(
+                                modifier = Modifier.weight(1f),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
 
                                 Text(
-                                    "$steps",
-                                    style = MaterialTheme.typography.displaySmall,
-                                    color = Color(0xFF66BB6A)
+                                    "🔥",
+                                    fontSize = 22.sp
                                 )
+
+                                Spacer(Modifier.width(10.dp))
+
+                                Column {
+
+                                    Text(
+                                        "Pasos de hoy",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+
+                                    Text(
+                                        "$steps",
+                                        style = MaterialTheme.typography.headlineSmall,
+                                        color = Color(0xFF66BB6A)
+                                    )
+                                }
                             }
 
-                            Column(horizontalAlignment = androidx.compose.ui.Alignment.End) {
+                            Column(
+                                horizontalAlignment = Alignment.End
+                            ) {
 
                                 Text(
-                                    "🎯 Meta",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                                    "Meta",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
-
-                                Spacer(Modifier.height(6.dp))
 
                                 Text(
                                     "$stepsGoal",
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
 
-                        Spacer(Modifier.height(14.dp))
+                        Spacer(Modifier.height(12.dp))
 
                         LinearProgressIndicator(
-                            progress = { steps.toFloat() / stepsGoal.toFloat() },
+                            progress = {
+                                (steps.toFloat() / stepsGoal.toFloat())
+                                    .coerceIn(0f, 1f)
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(10.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                                .height(8.dp)
+                                .clip(RoundedCornerShape(50)),
+
+                            color = Color(0xFF4CAF50),
+
+                            trackColor = Color(0xFF4CAF50)
+                                .copy(alpha = 0.18f)
+                        )
+
+                        Spacer(Modifier.height(6.dp))
+
+                        Text(
+                            "${((steps.toFloat() / stepsGoal.toFloat()) * 100).toInt()}% completado",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
             }
+
         }
 
         if (showLogoutDialog) {

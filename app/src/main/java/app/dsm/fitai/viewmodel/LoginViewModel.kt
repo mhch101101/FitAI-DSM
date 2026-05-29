@@ -96,9 +96,9 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch {
 
                 val user = userRepository.getUser(uuid)
-
-                val isIncompleteProfile =
-                    user == null || user.isProfileIncomplete()
+                Log.d("--user--",user?.uid.orEmpty())
+                val isIncompleteProfile = user == null || user.isProfileIncomplete()
+                Log.d("--user--",isIncompleteProfile.toString())
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,

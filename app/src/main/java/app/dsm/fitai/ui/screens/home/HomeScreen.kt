@@ -16,7 +16,8 @@ import app.dsm.fitai.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     navigateToLogin: () -> Unit = {},
-    onCreateRoutine: () -> Unit = {}
+    onCreateRoutine: () -> Unit = {},
+    navigateToProfileEdit: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val appComponent = (context.applicationContext as FitAIApp).appComponent
@@ -30,7 +31,8 @@ fun HomeScreen(
 
     LayoutScreen(
         context =context,
-        navigateToLogin=navigateToLogin
+        navigateToLogin=navigateToLogin,
+        navigateToProfileEdit=navigateToProfileEdit
     ) {
 
         Column(

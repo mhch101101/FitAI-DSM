@@ -18,7 +18,7 @@ object DatabaseModule {
             app,
             AppDatabase::class.java,
             "fitai_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
