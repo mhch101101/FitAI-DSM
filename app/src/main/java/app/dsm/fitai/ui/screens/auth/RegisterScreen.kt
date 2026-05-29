@@ -57,9 +57,6 @@ fun RegisterScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // =======================
-                // HEADER
-                // =======================
                 Icon(
                     imageVector = Icons.Default.PersonAdd,
                     contentDescription = null,
@@ -83,9 +80,6 @@ fun RegisterScreen(
 
                 Spacer(Modifier.height(24.dp))
 
-                // =======================
-                // EMAIL
-                // =======================
                 OutlinedTextField(
                     value = state.email,
                     onValueChange = viewModel::onEmailChanged,
@@ -99,9 +93,6 @@ fun RegisterScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                // =======================
-                // PASSWORD
-                // =======================
                 OutlinedTextField(
                     value = state.password,
                     onValueChange = viewModel::onPasswordChanged,
@@ -128,9 +119,6 @@ fun RegisterScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                // =======================
-                // CONFIRM PASSWORD (CON OJITO)
-                // =======================
                 OutlinedTextField(
                     value = state.confirmPassword,
                     onValueChange = viewModel::onConfirmPasswordChanged,
@@ -157,9 +145,6 @@ fun RegisterScreen(
 
                 Spacer(Modifier.height(16.dp))
 
-                // =======================
-                // ERROR
-                // =======================
                 state.error?.let {
                     Text(
                         text = it,
@@ -169,9 +154,6 @@ fun RegisterScreen(
                     Spacer(Modifier.height(10.dp))
                 }
 
-                // =======================
-                // BUTTON
-                // =======================
                 Button(
                     onClick = { viewModel.register() },
                     modifier = Modifier

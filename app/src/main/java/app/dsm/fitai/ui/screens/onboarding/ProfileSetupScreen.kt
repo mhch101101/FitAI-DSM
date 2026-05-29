@@ -69,7 +69,6 @@ fun ProfileSetupScreen(
         verticalArrangement = Arrangement.Center
     ) {
 
-        // ================= TITLE =================
         Text(
             text = "Completa tu perfil",
             style = MaterialTheme.typography.headlineLarge.copy(
@@ -88,7 +87,6 @@ fun ProfileSetupScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // ================= INPUTS =================
         OutlinedTextField(
             value = state.firstName,
             onValueChange = viewModel::onFirstNameChange,
@@ -117,7 +115,6 @@ fun ProfileSetupScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // ================= SEXO =================
         Text(
             "Sexo",
             fontWeight = FontWeight.SemiBold,
@@ -209,7 +206,6 @@ fun ProfileSetupScreen(
 
         Spacer(Modifier.height(24.dp))
 
-        // ================= ERROR =================
         state.error?.let {
             Text(
                 text = it,

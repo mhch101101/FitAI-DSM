@@ -31,15 +31,6 @@ class MainActivity : ComponentActivity() {
                         navController,
                         modifier = Modifier.padding(innerPadding)
                     )
-                    /*SplashScreen(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )*/
-                    //LoginScreen()
-                    /*Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )*/
                 }
             }
         }

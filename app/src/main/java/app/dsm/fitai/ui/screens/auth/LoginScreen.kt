@@ -56,7 +56,6 @@ fun LoginScreen(
         }
     }
 
-    // GOOGLE
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -66,7 +65,6 @@ fun LoginScreen(
             val account = task.getResult(ApiException::class.java)
             account.idToken?.let {
                 viewModel.onGoogleTokenReceived(it)
-                //navigateToHome()
             }
         } catch (e: Exception) {
             Log.e("Login", "Google error", e)
@@ -117,7 +115,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        // ================= EMAIL =================
         OutlinedTextField(
             value = uiState.email,
             onValueChange = viewModel::onEmailChanged,
@@ -131,7 +128,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // ================= PASSWORD =================
         OutlinedTextField(
             value = uiState.password,
             onValueChange = viewModel::onPasswordChanged,
@@ -160,7 +156,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ================= ERROR =================
         uiState.errorMessage?.let {
             Text(
                 text = it,
@@ -169,7 +164,6 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(10.dp))
         }
 
-        // ================= LOGIN BUTTON =================
         Button(
             onClick = { viewModel.loginWithEmail() },
             modifier = Modifier
@@ -197,7 +191,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        // ================= DIVIDER =================
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()

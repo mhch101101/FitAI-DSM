@@ -107,7 +107,6 @@ fun LayoutScreen(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            // 🔥 CONTENIDO CENTRAL
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center
@@ -115,7 +114,6 @@ fun LayoutScreen(
                 content()
             }
 
-            // 👣 CARD PASOS MÁS FITNESS / ENERGÉTICA
             if (showStepsCard) {
 
                 Card(
