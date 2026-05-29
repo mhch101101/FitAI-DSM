@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,12 +26,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.InputChip
-import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -472,12 +469,16 @@ fun StepConfiguration(
                 color = primary
             )
         )
-        Text("Ajusta tu plan según tu disponibilidad.", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
-        Spacer(Modifier.height(24.dp))
+        Text(
+            text = "Ajusta tu plan según tu disponibilidad.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.Gray
+        )
+        Spacer(Modifier.height(32.dp))
 
-        // Selección de Nivel
-        Text("Nivel de experiencia", fontWeight = FontWeight.SemiBold)
-        Spacer(Modifier.height(8.dp))
+        // Nivel de experiencia
+        Text("Nivel de experiencia", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -491,58 +492,65 @@ fun StepConfiguration(
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isSelected) primary else unselectedSurface,
                         contentColor = if (isSelected) Color.White else Color.Black
-                    )
+                    ),
+                    contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text(level, style = MaterialTheme.typography.labelSmall)
+                    Text(level, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
                 }
             }
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(32.dp))
 
-        // Frecuencia
-        Text("Días por semana", fontWeight = FontWeight.SemiBold)
+        // Días por semana
+        Text("Días por semana", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
         Text("¿Cuántos días planeas entrenar?", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             (3..6).forEach { day ->
                 val isSelected = state.trainingFrequency == day
-                FilterChip(
-                    selected = isSelected,
+                Button(
                     onClick = { onFrequencyChange(day) },
-                    label = { Text("$day días") },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = primary,
-                        selectedLabelColor = Color.White
-                    )
-                )
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) primary else unselectedSurface,
+                        contentColor = if (isSelected) Color.White else Color.Black
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("$day días", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                }
             }
         }
 
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(32.dp))
 
-        // Duración
-        Text("Duración de sesión", fontWeight = FontWeight.SemiBold)
+        // Duración de sesión
+        Text("Duración de sesión", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
         Text("Tiempo promedio por entrenamiento.", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             listOf(45, 60, 90).forEach { mins ->
                 val isSelected = state.trainingDuration == mins
-                InputChip(
-                    selected = isSelected,
+                Button(
                     onClick = { onDurationChange(mins) },
-                    label = { Text("$mins min") },
-                    colors = InputChipDefaults.inputChipColors(
-                        selectedContainerColor = primary,
-                        selectedLabelColor = Color.White
-                    )
-                )
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isSelected) primary else unselectedSurface,
+                        contentColor = if (isSelected) Color.White else Color.Black
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text("$mins min", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                }
             }
         }
 
