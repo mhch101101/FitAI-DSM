@@ -1,6 +1,9 @@
 package app.dsm.fitai.data.repository
 
 import app.dsm.fitai.data.firebase.RoutineFirestore
+import app.dsm.fitai.data.remote.api.RoutineApi
+import app.dsm.fitai.data.remote.dto.GenerateRoutineRequestDto
+import app.dsm.fitai.data.remote.mapper.toDomain
 import app.dsm.fitai.domain.model.DayRoutine
 import app.dsm.fitai.domain.model.Exercise
 import app.dsm.fitai.domain.model.Routine
@@ -9,8 +12,39 @@ import java.util.Date
 import javax.inject.Inject
 
 class RoutineRepositoryImpl @Inject constructor(
-    private val routineFirestore: RoutineFirestore
+    private val routineFirestore: RoutineFirestore,
+    private val api: RoutineApi
 ) : RoutineRepository {
+
+    override suspend fun generateRoutine(
+        userId:String,
+        objective: String,
+        experienceLevel: String,
+        daysPerWeek: Int,
+        sessionDuration: Int
+    ): Routine {
+
+        val response = api.generateRoutine(
+            GenerateRoutineRequestDto(
+                objective = objective,
+                experienceLevel = experienceLevel,
+                daysPerWeek = daysPerWeek,
+                sessionDuration = sessionDuration
+            )
+        )
+
+        if (!response.success || response.routine == null) {
+            throw Exception("No se pudo generar la rutina")
+        }
+        val routineResponse = response.routine
+            .toDomain()
+            .copy(
+                userId = userId,
+                createdAt = Date(),
+                isActive = true
+            )
+        return routineResponse
+    }
 
     override suspend fun generateDefaultRoutine(userId: String, objective: String): Routine {
         val routine = Routine(
