@@ -16,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import app.dsm.fitai.R
 import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.domain.model.DayRoutine
 import app.dsm.fitai.domain.model.Exercise
@@ -77,12 +79,12 @@ fun EmptyRoutineView(onCreateRoutine: () -> Unit) {
         ) {
             Column(Modifier.padding(18.dp)) {
                 Text(
-                    "Hoy es un gran día",
+                    stringResource(R.string.home_empty_title),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(Modifier.height(6.dp))
-                Text("Crea tu rutina con IA y mejora tu rendimiento")
+                Text(stringResource(R.string.home_empty_description))
             }
         }
 
@@ -100,14 +102,14 @@ fun EmptyRoutineView(onCreateRoutine: () -> Unit) {
                     modifier = Modifier.size(56.dp)
                 )
                 Spacer(Modifier.height(12.dp))
-                Text("Crear Rutina", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.home_create_routine), style = MaterialTheme.typography.titleMedium)
             }
         }
 
         Spacer(Modifier.height(20.dp))
 
         Text(
-            "IA personalizada en segundos",
+            stringResource(R.string.home_footer),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary
         )
@@ -124,7 +126,7 @@ fun RoutineView(routine: Routine) {
             color = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "Objetivo: ${routine.objective}",
+            text = stringResource(R.string.home_objective_label, routine.objective),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -185,13 +187,18 @@ fun ExerciseItem(exercise: Exercise) {
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = "${exercise.muscleGroup} • ${exercise.sets} series x ${exercise.reps}",
+                text = stringResource(
+                    R.string.home_exercise_detail,
+                    exercise.muscleGroup,
+                    exercise.sets,
+                    exercise.reps
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (exercise.suggestedWeight > 0) {
                 Text(
-                    text = "Peso sugerido: ${exercise.suggestedWeight} kg",
+                    text = stringResource(R.string.home_suggested_weight, exercise.suggestedWeight),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -207,7 +214,7 @@ fun ExerciseItem(exercise: Exercise) {
             )
             Spacer(Modifier.width(4.dp))
             Text(
-                text = "${exercise.restTime}s",
+                text = stringResource(R.string.home_rest_time, exercise.restTime),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

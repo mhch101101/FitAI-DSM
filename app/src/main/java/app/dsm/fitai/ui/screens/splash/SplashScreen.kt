@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.compose.ui.res.stringResource
+import app.dsm.fitai.R
 import app.dsm.fitai.data.firebase.AuthService
 import app.dsm.fitai.data.firebase.UserFirestore
 import app.dsm.fitai.di.FitAIApp
@@ -78,7 +80,7 @@ fun SplashUI() {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "FitAI",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineMedium
             )
 

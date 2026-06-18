@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.res.stringResource
+import app.dsm.fitai.R
 import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.ui.screens.home.LayoutScreen
 import app.dsm.fitai.viewmodel.ProfileEditViewModel
@@ -83,7 +85,7 @@ fun ProfileEditScreen(
                 ) {
 
                     Text(
-                        text = "Editar Perfil",
+                        text = stringResource(R.string.profile_edit_title),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = primary
@@ -92,7 +94,7 @@ fun ProfileEditScreen(
                     Spacer(Modifier.height(6.dp))
 
                     Text(
-                        text = "Actualiza tu información personal y fitness.",
+                        text = stringResource(R.string.profile_edit_subtitle),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -103,7 +105,7 @@ fun ProfileEditScreen(
             OutlinedTextField(
                 value = state.firstName,
                 onValueChange = viewModel::onFirstNameChange,
-                label = { Text("Nombres") },
+                label = { Text(stringResource(R.string.profile_first_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = primary,
@@ -116,7 +118,7 @@ fun ProfileEditScreen(
             OutlinedTextField(
                 value = state.lastName,
                 onValueChange = viewModel::onLastNameChange,
-                label = { Text("Apellidos") },
+                label = { Text(stringResource(R.string.profile_last_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = primary,
@@ -127,7 +129,7 @@ fun ProfileEditScreen(
             Spacer(Modifier.height(18.dp))
 
             Text(
-                "Sexo",
+                stringResource(R.string.profile_gender_label),
                 modifier = Modifier.fillMaxWidth(),
                 fontWeight = FontWeight.SemiBold
             )
@@ -157,7 +159,7 @@ fun ProfileEditScreen(
                             else Color.Black
                     )
                 ) {
-                    Text("Masculino")
+                    Text(stringResource(R.string.profile_gender_male))
                 }
 
                 Button(
@@ -175,7 +177,7 @@ fun ProfileEditScreen(
                             else Color.Black
                     )
                 ) {
-                    Text("Femenino")
+                    Text(stringResource(R.string.profile_gender_female))
                 }
             }
 
@@ -187,7 +189,7 @@ fun ProfileEditScreen(
                 readOnly = true,
                 modifier = Modifier.fillMaxWidth(),
                 label = {
-                    Text("Fecha de nacimiento")
+                    Text(stringResource(R.string.profile_birth_date_label))
                 },
                 trailingIcon = {
 
@@ -273,7 +275,7 @@ fun ProfileEditScreen(
                     Spacer(Modifier.width(8.dp))
 
                     Text(
-                        text = "Cancelar",
+                        text = stringResource(R.string.profile_edit_cancel),
                         maxLines = 1,
                         fontWeight = FontWeight.Bold
                     )
@@ -322,7 +324,7 @@ fun ProfileEditScreen(
                         Spacer(Modifier.width(8.dp))
 
                         Text(
-                            text = "Guardar",
+                            text = stringResource(R.string.profile_edit_save),
                             maxLines = 1,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
@@ -371,7 +373,7 @@ fun ProfileEditScreen(
                 title = {
 
                     Text(
-                        text = "Perfil actualizado",
+                        text = stringResource(R.string.profile_edit_success_title),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -381,7 +383,7 @@ fun ProfileEditScreen(
                 text = {
 
                     Text(
-                        text = "Tus datos se guardaron correctamente y ya están disponibles en tu perfil.",
+                        text = stringResource(R.string.profile_edit_success_message),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -412,7 +414,7 @@ fun ProfileEditScreen(
                     ) {
 
                         Text(
-                            "Continuar",
+                            stringResource(R.string.profile_continue),
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleMedium
                         )

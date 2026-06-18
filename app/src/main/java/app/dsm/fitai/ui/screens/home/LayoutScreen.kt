@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.dsm.fitai.R
 import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.viewmodel.LayoutViewModel
 
@@ -64,8 +66,9 @@ fun LayoutScreen(
                 ),
                 title = {
                     Column {
+                        val displayUserName = if (userName.isBlank()) stringResource(R.string.layout_default_user) else userName
                         Text(
-                            text = "Bienvenido, ${if (userName.isBlank()) "Usuario" else userName}",
+                            text = stringResource(R.string.layout_welcome_user, displayUserName),
                             style = MaterialTheme.typography.titleMedium,
                             color = Color.White
                         )
@@ -82,7 +85,7 @@ fun LayoutScreen(
                     IconButton(onClick = {navigateToProfileEdit()}) {
                         Icon(
                             Icons.Default.AccountCircle,
-                            contentDescription = "Editar perfil",
+                            contentDescription = stringResource(R.string.layout_edit_profile_desc),
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -90,7 +93,7 @@ fun LayoutScreen(
                     IconButton(onClick = { showLogoutDialog = true }) {
                         Icon(
                             Icons.Default.ExitToApp,
-                            contentDescription = "Salir",
+                            contentDescription = stringResource(R.string.layout_logout_desc),
                         )
                     }
                 }
@@ -148,7 +151,7 @@ fun LayoutScreen(
                                 Column {
 
                                     Text(
-                                        "Pasos de hoy",
+                                        stringResource(R.string.layout_steps_today),
                                         style = MaterialTheme.typography.labelMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -166,7 +169,7 @@ fun LayoutScreen(
                             ) {
 
                                 Text(
-                                    "Meta",
+                                    stringResource(R.string.layout_steps_goal_label),
                                     style = MaterialTheme.typography.labelMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -200,7 +203,10 @@ fun LayoutScreen(
                         Spacer(Modifier.height(6.dp))
 
                         Text(
-                            "${((steps.toFloat() / stepsGoal.toFloat()) * 100).toInt()}% completado",
+                            stringResource(
+                                R.string.layout_steps_completion,
+                                ((steps.toFloat() / stepsGoal.toFloat()) * 100).toInt()
+                            ),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -223,14 +229,14 @@ fun LayoutScreen(
                 },
                 title = {
                     Text(
-                        "Cerrar sesión",
+                        stringResource(R.string.layout_logout_title),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 text = {
                     Text(
-                        "¿Quieres salir de FitAI? Tu progreso seguirá guardado.",
+                        stringResource(R.string.layout_logout_message),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
@@ -244,12 +250,12 @@ fun LayoutScreen(
                             containerColor = MaterialTheme.colorScheme.error
                         )
                     ) {
-                        Text("Salir")
+                        Text(stringResource(R.string.layout_logout_confirm))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showLogoutDialog = false }) {
-                        Text("Cancelar")
+                        Text(stringResource(R.string.layout_logout_cancel))
                     }
                 },
                 shape = MaterialTheme.shapes.extraLarge
