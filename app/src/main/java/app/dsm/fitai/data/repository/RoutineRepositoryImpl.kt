@@ -1,5 +1,9 @@
 package app.dsm.fitai.data.repository
 
+import app.dsm.fitai.data.local.dao.RoutineDao
+import app.dsm.fitai.data.local.mapper.toDomain
+import app.dsm.fitai.data.local.mapper.toEntity
+import app.dsm.fitai.data.local.mapper.toRoomStructure
 import app.dsm.fitai.data.firebase.RoutineFirestore
 import app.dsm.fitai.data.remote.api.RoutineApi
 import app.dsm.fitai.data.remote.dto.GenerateRoutineRequestDto
@@ -13,6 +17,7 @@ import javax.inject.Inject
 
 class RoutineRepositoryImpl @Inject constructor(
     private val routineFirestore: RoutineFirestore,
+    private val routineDao: RoutineDao,
     private val api: RoutineApi
 ) : RoutineRepository {
 
@@ -43,6 +48,8 @@ class RoutineRepositoryImpl @Inject constructor(
                 createdAt = Date(),
                 isActive = true
             )
+        
+        saveRoutine(routineResponse)
         return routineResponse
     }
 
@@ -85,10 +92,35 @@ class RoutineRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRoutine(userId: String): Routine? {
-        return routineFirestore.getRoutine(userId)
+        // Llamada a BD local
+        val localRoutine = routineDao.getActiveRoutineWithDetails(userId)
+        if (localRoutine != null) {
+            return localRoutine.toDomain()
+        }
+        
+        // Si no hay local, buscamos en Firestore
+        val remoteRoutine = routineFirestore.getRoutine(userId)
+        if (remoteRoutine != null) {
+            saveRoutine(remoteRoutine) // Sincronizamos localmente
+            return remoteRoutine
+        }
+        
+        return null
     }
 
     override suspend fun saveRoutine(routine: Routine) {
+        // Guardar en Room
+        val routineEntity = routine.toEntity()
+        val (days, exercises, baseExercises) = routine.toRoomStructure(routineEntity.id)
+        
+        routineDao.saveFullRoutine(
+            routine = routineEntity,
+            days = days,
+            exercises = exercises,
+            baseExercises = baseExercises
+        )
+
+        // Guardar en Firestore
         routineFirestore.saveRoutine(routine)
     }
 }
