@@ -10,7 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import app.dsm.fitai.R
 import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.viewmodel.LoginViewModel
 import app.dsm.fitai.viewmodel.RegisterViewModel
@@ -67,13 +70,13 @@ fun RegisterScreen(
                 Spacer(Modifier.height(10.dp))
 
                 Text(
-                    text = "Únete a FitAI",
+                    text = stringResource(R.string.register_title),
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    fontWeight = FontWeight.Bold
                 )
 
                 Text(
-                    text = "Crea tu cuenta y empieza a entrenar inteligente",
+                    text = stringResource(R.string.register_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -83,7 +86,7 @@ fun RegisterScreen(
                 OutlinedTextField(
                     value = state.email,
                     onValueChange = viewModel::onEmailChanged,
-                    label = { Text("Correo") },
+                    label = { Text(stringResource(R.string.register_email_label)) },
                     leadingIcon = {
                         Icon(Icons.Default.Email, null)
                     },
@@ -96,7 +99,7 @@ fun RegisterScreen(
                 OutlinedTextField(
                     value = state.password,
                     onValueChange = viewModel::onPasswordChanged,
-                    label = { Text("Contraseña") },
+                    label = { Text(stringResource(R.string.register_password_label)) },
                     leadingIcon = {
                         Icon(Icons.Default.Lock, null)
                     },
@@ -122,7 +125,7 @@ fun RegisterScreen(
                 OutlinedTextField(
                     value = state.confirmPassword,
                     onValueChange = viewModel::onConfirmPasswordChanged,
-                    label = { Text("Confirmar contraseña") },
+                    label = { Text(stringResource(R.string.register_confirm_password_label)) },
                     leadingIcon = {
                         Icon(Icons.Default.Lock, null)
                     },
@@ -168,14 +171,14 @@ fun RegisterScreen(
                             strokeWidth = 2.dp
                         )
                     } else {
-                        Text("Crear cuenta")
+                        Text(stringResource(R.string.register_button))
                     }
                 }
 
                 Spacer(Modifier.height(10.dp))
 
                 TextButton(onClick = navigateToLogin) {
-                    Text("Ya tengo cuenta")
+                    Text(stringResource(R.string.register_login_button))
                 }
             }
         }

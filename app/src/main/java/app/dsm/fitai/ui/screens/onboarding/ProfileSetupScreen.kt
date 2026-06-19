@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -141,7 +142,7 @@ fun ProfileSetupContent(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = "Paso ${state.currentStep} de 3",
+            text = stringResource(R.string.profile_step_indicator, state.currentStep),
             style = MaterialTheme.typography.labelLarge,
             color = Color.Gray,
             modifier = Modifier.fillMaxWidth(),
@@ -206,7 +207,7 @@ fun ProfileSetupContent(
                 ) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = primary)
                     Spacer(Modifier.size(8.dp))
-                    Text("Atrás", color = primary)
+                    Text(stringResource(R.string.profile_back), color = primary)
                 }
                 Spacer(Modifier.size(16.dp))
             }
@@ -223,8 +224,8 @@ fun ProfileSetupContent(
                 if (state.isLoading) {
                     CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White)
                 } else {
-                    val text = if (state.currentStep < 3) "Continuar" else "Finalizar"
-                    Text(text, fontWeight = FontWeight.Bold)
+                    val textRes = if (state.currentStep < 3) R.string.profile_continue else R.string.profile_finish
+                    Text(stringResource(textRes), fontWeight = FontWeight.Bold)
                     if (state.currentStep < 3) {
                         Spacer(Modifier.size(8.dp))
                         Icon(Icons.AutoMirrored.Filled.ArrowForward, null)
@@ -249,19 +250,19 @@ fun StepPersonalData(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "Datos Personales",
+            text = stringResource(R.string.profile_personal_data_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = primary
             )
         )
-        Text("Cuéntanos un poco sobre ti.", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+        Text(stringResource(R.string.profile_personal_data_subtitle), style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
         Spacer(Modifier.height(24.dp))
 
         OutlinedTextField(
             value = state.firstName,
             onValueChange = onFirstNameChange,
-            label = { Text("Nombres") },
+            label = { Text(stringResource(R.string.profile_first_name)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
         )
@@ -269,7 +270,7 @@ fun StepPersonalData(
         OutlinedTextField(
             value = state.lastName,
             onValueChange = onLastNameChange,
-            label = { Text("Apellidos") },
+            label = { Text(stringResource(R.string.profile_last_name)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp)
         )
@@ -279,7 +280,7 @@ fun StepPersonalData(
         OutlinedTextField(
             value = state.weight,
             onValueChange = onWeightChange,
-            label = { Text("Peso (kg)") },
+            label = { Text(stringResource(R.string.profile_weight)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
             keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
@@ -290,7 +291,7 @@ fun StepPersonalData(
         Spacer(Modifier.height(16.dp))
 
         Text(
-            "Sexo",
+            stringResource(R.string.profile_gender_label),
             fontWeight = FontWeight.SemiBold,
             color = Color.DarkGray
         )
@@ -312,7 +313,7 @@ fun StepPersonalData(
                 ),
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Masculino")
+                Text(stringResource(R.string.profile_gender_male))
             }
 
             Button(
@@ -323,11 +324,11 @@ fun StepPersonalData(
                     contentColor = if (isFemale) Color.White else Color.Black
                 ),
                 modifier = Modifier.weight(1f)
-            ) { Text("Femenino") }
+            ) { Text(stringResource(R.string.profile_gender_female)) }
         }
         Spacer(Modifier.height(16.dp))
         Text(
-            "Fecha de nacimiento",
+            stringResource(R.string.profile_birth_date_label),
             fontWeight = FontWeight.SemiBold,
             color = Color.DarkGray
         )
@@ -335,7 +336,7 @@ fun StepPersonalData(
         OutlinedTextField(
             value = state.birthDateText,
             onValueChange = {},
-            label = { Text("Selecciona tu fecha") },
+            label = { Text(stringResource(R.string.profile_birth_date_placeholder)) },
             readOnly = true,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
@@ -376,18 +377,23 @@ fun StepObjective(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "¿Cuál es tu objetivo?",
+            text = stringResource(R.string.profile_objective_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = primary
             )
         )
-        Text("Selecciona una opción para personalizar tu plan.", style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+        Text(stringResource(R.string.profile_objective_subtitle), style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
         Spacer(Modifier.height(24.dp))
 
         val objectives = listOf("Hipertrofia", "Fuerza", "Mixto")
         objectives.forEach { objective ->
             val isSelected = state.selectedObjective == objective
+            val objectiveNameRes = when(objective) {
+                "Hipertrofia" -> R.string.profile_objective_hypertrophy
+                "Fuerza" -> R.string.profile_objective_strength
+                else -> R.string.profile_objective_mixed
+            }
             OutlinedCard(
                 onClick = { onObjectiveChange(objective) },
                 modifier = Modifier
@@ -406,7 +412,7 @@ fun StepObjective(
                 ) {
                     RadioButton(selected = isSelected, onClick = { onObjectiveChange(objective) }, colors = RadioButtonDefaults.colors(selectedColor = primary))
                     Spacer(Modifier.size(12.dp))
-                    Text(objective, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(objectiveNameRes), fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, style = MaterialTheme.typography.bodyLarge)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -415,12 +421,13 @@ fun StepObjective(
                     Column(
                         modifier = Modifier.weight(1f)
                     ) {
+                        val descRes = when (objective) {
+                            "Hipertrofia" -> R.string.profile_objective_hypertrophy_desc
+                            "Fuerza" -> R.string.profile_objective_strength_desc
+                            else -> R.string.profile_objective_mixed_desc
+                        }
                         Text(
-                            text = when (objective) {
-                                "Hipertrofia" -> "Enfoque en el crecimiento muscular estético y densidad mediante volumen optimizado."
-                                "Fuerza" -> "Incrementa tu potencia máxima y fuerza mediante la capacidad de carga en ejercicios multiarticulares."
-                                else -> "Equilibrio perfecto entre desarrollo muscular, fuerza y rendimiento en el entrenamiento cardiovascular."
-                            },
+                            text = stringResource(descRes),
                             modifier = Modifier.padding(10.dp)
                         )
 
@@ -463,21 +470,21 @@ fun StepConfiguration(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "Configuración",
+            text = stringResource(R.string.profile_config_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = primary
             )
         )
         Text(
-            text = "Ajusta tu plan según tu disponibilidad.",
+            text = stringResource(R.string.profile_config_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray
         )
         Spacer(Modifier.height(32.dp))
 
         // Nivel de experiencia
-        Text("Nivel de experiencia", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.profile_experience_level), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -485,6 +492,11 @@ fun StepConfiguration(
         ) {
             listOf("Principiante", "Intermedio", "Avanzado").forEach { level ->
                 val isSelected = state.selectedLevel == level
+                val levelNameRes = when(level) {
+                    "Principiante" -> R.string.profile_level_beginner
+                    "Intermedio" -> R.string.profile_level_intermediate
+                    else -> R.string.profile_level_advanced
+                }
                 Button(
                     onClick = { onLevelChange(level) },
                     modifier = Modifier.weight(1f),
@@ -495,7 +507,7 @@ fun StepConfiguration(
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text(level, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    Text(stringResource(levelNameRes), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
                 }
             }
         }
@@ -503,8 +515,8 @@ fun StepConfiguration(
         Spacer(Modifier.height(32.dp))
 
         // Días por semana
-        Text("Días por semana", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-        Text("¿Cuántos días planeas entrenar?", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Text(stringResource(R.string.profile_days_per_week), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.profile_days_per_week_subtitle), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -522,7 +534,7 @@ fun StepConfiguration(
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text("$day días", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.profile_days_count, day), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
                 }
             }
         }
@@ -530,8 +542,8 @@ fun StepConfiguration(
         Spacer(Modifier.height(32.dp))
 
         // Duración de sesión
-        Text("Duración de sesión", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-        Text("Tiempo promedio por entrenamiento.", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Text(stringResource(R.string.profile_session_duration), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.profile_session_duration_subtitle), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -549,7 +561,7 @@ fun StepConfiguration(
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text("$mins min", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.profile_session_minutes, mins), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
                 }
             }
         }
