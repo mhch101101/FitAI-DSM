@@ -100,7 +100,7 @@ fun LoginScreen(
         Text(
             text = stringResource(R.string.login_subtitle),
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 letterSpacing = 0.5.sp
             )
         )
@@ -173,8 +173,8 @@ fun LoginScreen(
             elevation = ButtonDefaults.buttonElevation(6.dp),
             enabled = !uiState.isLoading,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00BFA6),
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             if (uiState.isLoading) {
@@ -195,12 +195,12 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Divider(modifier = Modifier.weight(1f))
+        HorizontalDivider(modifier = Modifier.weight(1f))
             Text(
                 text = "  ${stringResource(R.string.login_divider_or)}  ",
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.outline
             )
-            Divider(modifier = Modifier.weight(1f))
+            HorizontalDivider(modifier = Modifier.weight(1f))
         }
 
         Spacer(modifier = Modifier.height(18.dp))
@@ -215,11 +215,11 @@ fun LoginScreen(
                 .height(52.dp),
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color(0xFFF5F7FA),
-                contentColor = Color.Black
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ),
             border = ButtonDefaults.outlinedButtonBorder.copy(
-                brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFE0E0E0))
+                brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.outlineVariant)
             )
         ) {
             Icon(
@@ -242,10 +242,10 @@ fun LoginScreen(
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 containerColor = Color.Transparent,
-                contentColor = Color(0xFF00BFA6)
+                contentColor = MaterialTheme.colorScheme.primary
             ),
             border = ButtonDefaults.outlinedButtonBorder.copy(
-                brush = androidx.compose.ui.graphics.SolidColor(Color(0xFF00BFA6))
+                brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary)
             )
         ) {
             Icon(
@@ -261,7 +261,7 @@ fun LoginScreen(
         Text(
             text = stringResource(R.string.login_footer),
             style = MaterialTheme.typography.labelMedium,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

@@ -74,17 +74,20 @@ fun EmptyRoutineView(onCreateRoutine: () -> Unit) {
     ) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                containerColor = MaterialTheme.colorScheme.primaryContainer
             )
         ) {
             Column(Modifier.padding(18.dp)) {
                 Text(
                     stringResource(R.string.home_empty_title),
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Spacer(Modifier.height(6.dp))
-                Text(stringResource(R.string.home_empty_description))
+                Text(
+                    text = stringResource(R.string.home_empty_description),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
         }
 
@@ -148,14 +151,17 @@ fun RoutineView(routine: Routine) {
 fun DayCard(day: DayRoutine) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
             Text(
                 text = day.dayName,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.primary
             )
             
             Spacer(Modifier.height(8.dp))
