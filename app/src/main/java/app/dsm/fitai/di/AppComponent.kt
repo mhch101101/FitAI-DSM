@@ -22,6 +22,7 @@ interface AppComponent {
     fun authRepository(): AuthRepository
     fun routineRepository(): RoutineRepository
     fun stepRepository(): app.dsm.fitai.domain.repository.StepRepository
+    fun trainingRepository(): app.dsm.fitai.domain.repository.TrainingRepository
     fun userPreferencesRepository(): app.dsm.fitai.data.local.preferences.UserPreferencesRepository
     fun provideStepSensorManager(): app.dsm.fitai.data.sensor.StepSensorManager
 

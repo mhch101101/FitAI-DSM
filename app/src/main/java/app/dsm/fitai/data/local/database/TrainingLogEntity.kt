@@ -3,6 +3,7 @@ package app.dsm.fitai.data.local.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -20,7 +21,8 @@ import androidx.room.PrimaryKey
             childColumns = ["exercise_id"],
             onDelete = ForeignKey.RESTRICT
         )
-    ]
+    ],
+    indices = [Index("training_session_id"), Index("exercise_id")]
 )
 data class TrainingLogEntity(
     @PrimaryKey val id: String,
