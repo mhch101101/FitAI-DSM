@@ -40,6 +40,18 @@ interface RoutineDao {
     @Transaction
     @Query("SELECT * FROM routines WHERE user_id = :userId AND is_active = 1 LIMIT 1")
     suspend fun getActiveRoutineWithDetails(userId: String): RoutineWithDaysAndExercises?
+
+    @Query("SELECT * FROM routines WHERE is_synced = 0")
+    suspend fun getPendingRoutines(): List<RoutineEntity>
+
+    @Query("SELECT * FROM routine_days WHERE routine_id = :routineId")
+    suspend fun getRoutineDays(routineId: String): List<RoutineDayEntity>
+
+    @Query("SELECT * FROM routine_exercises WHERE routine_day_id = :dayId")
+    suspend fun getRoutineExercises(dayId: String): List<RoutineExerciseEntity>
+
+    @Query("UPDATE routines SET is_synced = 1 WHERE id = :routineId")
+    suspend fun markRoutineSynced(routineId: String)
 }
 
 data class RoutineWithDaysAndExercises(
