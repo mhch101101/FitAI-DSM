@@ -21,17 +21,8 @@ class StepRepositoryImpl @Inject constructor(
         return stepDao.getStepsFlowByDate(getTodayDate())
     }
 
-    override suspend fun updateSteps(steps: Int, lastSensorValue: Float) {
-        val today = getTodayDate()
-        val existing = stepDao.getStepsByDate(today)
-        
-        val record = if (existing != null) {
-            existing.copy(steps = steps, lastSensorValue = lastSensorValue)
-        } else {
-            // Default goal if not set yet, though it should be set by setStepGoal
-            StepRecordEntity(today, steps, 8000, lastSensorValue)
-        }
-        stepDao.insertOrUpdateSteps(record)
+    override suspend fun updateSteps(rawSensorValue: Float) {
+        stepDao.updateStepsAtomic(getTodayDate(), rawSensorValue)
     }
 
     override suspend fun setStepGoal(goal: Int) {
@@ -55,6 +46,13 @@ class StepRepositoryImpl @Inject constructor(
             "fuerza" -> 7000
             "mixto" -> 10000
             else -> 9000
+        }
+    }
+
+    override suspend fun markAsNotified(date: String) {
+        val existing = stepDao.getStepsByDate(date)
+        if (existing != null) {
+            stepDao.insertOrUpdateSteps(existing.copy(notified = true))
         }
     }
 }

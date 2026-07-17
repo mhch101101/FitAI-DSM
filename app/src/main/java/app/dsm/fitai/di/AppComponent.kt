@@ -21,6 +21,7 @@ interface AppComponent {
     fun userRepository(): UserRepository
     fun authRepository(): AuthRepository
     fun routineRepository(): RoutineRepository
+    fun stepRepository(): app.dsm.fitai.domain.repository.StepRepository
     fun userPreferencesRepository(): app.dsm.fitai.data.local.preferences.UserPreferencesRepository
 
     @Component.Factory

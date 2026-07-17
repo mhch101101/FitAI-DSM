@@ -9,5 +9,6 @@ data class StepRecordEntity(
     val date: String, // Format: YYYY-MM-DD
     val steps: Int,
     val goal: Int,
-    val lastSensorValue: Float // To calculate delta if sensor doesn't reset
+    val lastSensorValue: Float, // To calculate delta if sensor doesn't reset
+    val notified: Boolean = false
 )
