@@ -70,6 +70,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("androidx.work:work-runtime-ktx:2.10.2")
     implementation(libs.androidx.datastore.preferences)
+    implementation("com.github.tehras:charts:0.2.4-alpha")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

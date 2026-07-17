@@ -27,7 +27,8 @@ import app.dsm.fitai.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     navigateToLogin: () -> Unit = {},
-    navigateToProfileEdit: () -> Unit = {}
+    navigateToProfileEdit: () -> Unit = {},
+    navigateToProgress: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val appComponent = (context.applicationContext as FitAIApp).appComponent
@@ -49,7 +50,8 @@ fun HomeScreen(
     LayoutScreen(
         context = context,
         navigateToLogin = navigateToLogin,
-        navigateToProfileEdit = navigateToProfileEdit
+        navigateToProfileEdit = navigateToProfileEdit,
+        navigateToProgress = navigateToProgress
     ) {
         if (uiState.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

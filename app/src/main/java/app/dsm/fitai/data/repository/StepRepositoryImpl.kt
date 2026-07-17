@@ -5,9 +5,12 @@ import app.dsm.fitai.data.local.database.StepRecordEntity
 import app.dsm.fitai.domain.repository.StepRepository
 import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.roundToInt
+import kotlin.random.Random
 
 class StepRepositoryImpl @Inject constructor(
     private val stepDao: StepDao
@@ -54,5 +57,41 @@ class StepRepositoryImpl @Inject constructor(
         if (existing != null) {
             stepDao.insertOrUpdateSteps(existing.copy(notified = true))
         }
+    }
+
+    override suspend fun seedDemoStepsIfEmpty() {
+        val today = getTodayDate()
+        // Only seed if there is no history before today. Today itself stays untouched
+        // so the real sensor reading remains the source of truth for the current day.
+        if (stepDao.countRecordsBefore(today) > 0) return
+
+        val goal = stepDao.getStepsByDate(today)?.goal ?: 8000
+        val calendar = Calendar.getInstance()
+
+        for (daysAgo in 1..6) {
+            calendar.time = Date()
+            calendar.add(Calendar.DAY_OF_YEAR, -daysAgo)
+            val date = dateFormat.format(calendar.time)
+            // lastSensorValue = 0f marks these as demo/history rows with no real
+            // sensor baseline, so updateStepsAtomic won't chain a delta off them.
+            stepDao.insertOrUpdateSteps(
+                StepRecordEntity(
+                    date = date,
+                    steps = demoStepsForGoal(goal),
+                    goal = goal,
+                    lastSensorValue = 0f
+                )
+            )
+        }
+    }
+
+    // Generates a plausible daily step count relative to the user's goal:
+    // most days land between ~60% and ~110% of the goal, so the week looks
+    // natural (some days short, some days meeting or beating the target)
+    // and scales with each user's objective instead of a fixed range.
+    private fun demoStepsForGoal(goal: Int): Int {
+        val ratio = Random.nextDouble(0.6, 1.1)
+        val jitter = Random.nextInt(-250, 251)
+        return (goal * ratio + jitter).roundToInt().coerceAtLeast(0)
     }
 }

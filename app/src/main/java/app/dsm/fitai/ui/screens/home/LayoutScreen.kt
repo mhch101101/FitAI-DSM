@@ -9,7 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
@@ -35,6 +37,8 @@ fun LayoutScreen(
     showStepsCard: Boolean = true,
     navigateToLogin: () -> Unit = {},
     navigateToProfileEdit: () -> Unit = {},
+    navigateToProgress: (() -> Unit)? = null,
+    onNavigateBack: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
 
@@ -127,7 +131,28 @@ fun LayoutScreen(
                         )
                     }
                 },
+                navigationIcon = {
+                    if (onNavigateBack != null) {
+                        IconButton(onClick = { onNavigateBack() }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.layout_back_desc),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                },
                 actions = {
+
+                    if (navigateToProgress != null) {
+                        IconButton(onClick = { navigateToProgress() }) {
+                            Icon(
+                                Icons.Default.BarChart,
+                                contentDescription = stringResource(R.string.layout_progress_desc),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
 
                     IconButton(onClick = {navigateToProfileEdit()}) {
                         Icon(

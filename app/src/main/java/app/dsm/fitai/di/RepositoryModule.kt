@@ -32,4 +32,9 @@ abstract class RepositoryModule {
         impl: app.dsm.fitai.data.repository.StepRepositoryImpl
     ): app.dsm.fitai.domain.repository.StepRepository
 
+    @Binds
+    abstract fun bindTrainingRepository(
+        impl: app.dsm.fitai.data.repository.TrainingRepositoryImpl
+    ): app.dsm.fitai.domain.repository.TrainingRepository
+
 }

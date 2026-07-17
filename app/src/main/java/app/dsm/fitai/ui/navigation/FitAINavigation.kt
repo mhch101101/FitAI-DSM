@@ -11,6 +11,7 @@ import app.dsm.fitai.ui.screens.auth.RegisterScreen
 import app.dsm.fitai.ui.screens.home.HomeScreen
 import app.dsm.fitai.ui.screens.onboarding.ProfileSetupScreen
 import app.dsm.fitai.ui.screens.profile.ProfileEditScreen
+import app.dsm.fitai.ui.screens.progress.ProgressScreen
 import app.dsm.fitai.ui.screens.splash.SplashScreen
 
 @Composable
@@ -50,7 +51,16 @@ fun FitAINavigation(
         composable(Screen.Home.route) {
             HomeScreen(
                 navigateToLogin={navHostController.navigate(Screen.Login.route)},
-                navigateToProfileEdit={navHostController.navigate(Screen.ProfileEdit.route)}
+                navigateToProfileEdit={navHostController.navigate(Screen.ProfileEdit.route)},
+                navigateToProgress={navHostController.navigate(Screen.Progress.route)}
+            )
+        }
+
+        composable(Screen.Progress.route) {
+            ProgressScreen(
+                navigateToLogin={navHostController.navigate(Screen.Login.route)},
+                navigateToProfileEdit={navHostController.navigate(Screen.ProfileEdit.route)},
+                onNavigateBack={navHostController.popBackStack()}
             )
         }
 
