@@ -10,4 +10,5 @@ interface StepRepository {
     fun getWeeklyHistory(): Flow<List<StepRecordEntity>>
     fun getRecommendedGoal(objective: String): Int
     suspend fun markAsNotified(date: String)
+    suspend fun seedDemoStepsIfEmpty()
 }
