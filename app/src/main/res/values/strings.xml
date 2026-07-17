@@ -84,6 +84,16 @@
     <string name="layout_logout_message">¿Quieres salir de FitAI? Tu progreso seguirá guardado.</string>
     <string name="layout_logout_confirm">Salir</string>
     <string name="layout_logout_cancel">Cancelar</string>
+    <string name="layout_progress_desc">Ver progreso</string>
+    <string name="layout_back_desc">Regresar</string>
+
+    <!-- Progress -->
+    <string name="progress_title">Mi progreso</string>
+    <string name="progress_strength_title">Progresión de fuerza (1RM estimado)</string>
+    <string name="progress_strength_empty">Aún no hay entrenamientos registrados</string>
+    <string name="progress_steps_title">Pasos de la semana</string>
+    <string name="progress_steps_empty">Aún no hay registros de pasos</string>
+    <string name="progress_one_rm_kg">%1$.1f kg</string>
 
     <!-- Profile Edit -->
     <string name="profile_edit_title">Editar Perfil</string>
