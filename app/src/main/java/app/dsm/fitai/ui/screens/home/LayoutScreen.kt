@@ -1,6 +1,11 @@
 package app.dsm.fitai.ui.screens.home
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.dsm.fitai.R
@@ -38,21 +44,44 @@ fun LayoutScreen(
     val viewModel = remember {
         LayoutViewModel(
             userRepository = appComponent.userRepository(),
-            authRepository = appComponent.authRepository()
+            authRepository = appComponent.authRepository(),
+            stepRepository = appComponent.stepRepository(),
+            stepSensorManager = appComponent.provideStepSensorManager()
         )
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) viewModel.startStepTracking()
+    }
+
+    LaunchedEffect(Unit) {
+        // ACTIVITY_RECOGNITION is a runtime permission only from API 29 onwards.
+        val needsRequest = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                ContextCompat.checkSelfPermission(
+                    ctx,
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                ) != PackageManager.PERMISSION_GRANTED
+
+        if (needsRequest) {
+            permissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
+        } else {
+            viewModel.startStepTracking()
+        }
     }
 
     val logoutEvent by viewModel.logoutEvent.collectAsState()
     val userName by viewModel.userName.collectAsState()
+    val todaySteps by viewModel.todaySteps.collectAsState(initial = null)
     LaunchedEffect(logoutEvent) {
         if (logoutEvent) navigateToLogin()
     }
 
     var showLogoutDialog by remember { mutableStateOf(false) }
 
-    val notificationsCount = 1
-    val steps = 8542
-    val stepsGoal = 10_000
+    val steps = todaySteps?.steps ?: 0
+    val stepsGoal = todaySteps?.goal ?: 8000
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,

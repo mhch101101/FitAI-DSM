@@ -69,7 +69,8 @@ fun ProfileSetupScreen(
     val viewModel = remember {
         ProfileSetupViewModel(
             authRepository = appComponent.authRepository(),
-            userRepository = appComponent.userRepository()
+            userRepository = appComponent.userRepository(),
+            stepRepository = appComponent.stepRepository()
         )
     }
 

@@ -27,4 +27,9 @@ abstract class RepositoryModule {
         impl: RoutineRepositoryImpl
     ): RoutineRepository
 
+    @Binds
+    abstract fun bindStepRepository(
+        impl: app.dsm.fitai.data.repository.StepRepositoryImpl
+    ): app.dsm.fitai.domain.repository.StepRepository
+
 }

@@ -57,4 +57,11 @@ object AppModule {
         )
     }
 
+    @Provides
+    fun provideStepSensorManager(
+        context: Context,
+        stepRepository: app.dsm.fitai.domain.repository.StepRepository
+    ): app.dsm.fitai.data.sensor.StepSensorManager {
+        return app.dsm.fitai.data.sensor.StepSensorManager(context, stepRepository)
+    }
 }
