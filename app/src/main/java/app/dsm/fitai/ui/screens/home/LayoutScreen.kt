@@ -60,9 +60,9 @@ fun LayoutScreen(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    Color(0xFF1B5E20).copy(alpha = 0.15f),
-                    titleContentColor = Color.White,
-                    actionIconContentColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 title = {
                     Column {
@@ -70,13 +70,13 @@ fun LayoutScreen(
                         Text(
                             text = stringResource(R.string.layout_welcome_user, displayUserName),
                             style = MaterialTheme.typography.titleMedium,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
                         Text(
                             text = title,
                             style = MaterialTheme.typography.titleLarge,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -86,7 +86,8 @@ fun LayoutScreen(
                         Icon(
                             Icons.Default.AccountCircle,
                             contentDescription = stringResource(R.string.layout_edit_profile_desc),
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(32.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -94,6 +95,7 @@ fun LayoutScreen(
                         Icon(
                             Icons.Default.ExitToApp,
                             contentDescription = stringResource(R.string.layout_logout_desc),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -121,9 +123,9 @@ fun LayoutScreen(
                 Card(
                     shape = RoundedCornerShape(26.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFF1B5E20).copy(alpha = 0.12f)
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
@@ -153,13 +155,13 @@ fun LayoutScreen(
                                     Text(
                                         stringResource(R.string.layout_steps_today),
                                         style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
                                     )
 
                                     Text(
                                         "$steps",
                                         style = MaterialTheme.typography.headlineSmall,
-                                        color = Color(0xFF66BB6A)
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer
                                     )
                                 }
                             }
@@ -171,13 +173,13 @@ fun LayoutScreen(
                                 Text(
                                     stringResource(R.string.layout_steps_goal_label),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
 
                                 Text(
                                     "$stepsGoal",
                                     style = MaterialTheme.typography.titleLarge,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
                         }
@@ -194,10 +196,9 @@ fun LayoutScreen(
                                 .height(8.dp)
                                 .clip(RoundedCornerShape(50)),
 
-                            color = Color(0xFF4CAF50),
+                            color = MaterialTheme.colorScheme.primary,
 
-                            trackColor = Color(0xFF4CAF50)
-                                .copy(alpha = 0.18f)
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant
                         )
 
                         Spacer(Modifier.height(6.dp))
@@ -208,7 +209,7 @@ fun LayoutScreen(
                                 ((steps.toFloat() / stepsGoal.toFloat()) * 100).toInt()
                             ),
                             style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -219,7 +220,7 @@ fun LayoutScreen(
         if (showLogoutDialog) {
             AlertDialog(
                 onDismissRequest = { showLogoutDialog = false },
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 icon = {
                     Icon(
                         Icons.Default.ExitToApp,

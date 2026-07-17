@@ -1,5 +1,6 @@
 package app.dsm.fitai.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.dsm.fitai.domain.model.User
@@ -122,6 +123,7 @@ class ProfileSetupViewModel @Inject constructor(
                 )
 
             } catch (e: Exception) {
+                Log.e("ProfileSetupViewModel", "Error al guardar perfil", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = "Error al guardar perfil"

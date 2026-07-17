@@ -20,9 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import app.dsm.fitai.R
+import app.dsm.fitai.data.local.preferences.ThemeMode
 import app.dsm.fitai.di.FitAIApp
 import app.dsm.fitai.ui.screens.home.LayoutScreen
+import app.dsm.fitai.ui.theme.ContrastLevel
+import app.dsm.fitai.ui.viewmodel.MainViewModel
 import app.dsm.fitai.viewmodel.ProfileEditViewModel
 import java.util.Calendar
 
@@ -35,6 +39,17 @@ fun ProfileEditScreen(
     val context = LocalContext.current
     val appComponent =
         (context.applicationContext as FitAIApp).appComponent
+    val userPreferencesRepository = appComponent.userPreferencesRepository()
+
+    val mainViewModel: MainViewModel = viewModel(
+        factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return MainViewModel(userPreferencesRepository) as T
+            }
+        }
+    )
+
+    val userPreferences by mainViewModel.userPreferences.collectAsState()
 
     val viewModel = remember {
         ProfileEditViewModel(
@@ -55,11 +70,6 @@ fun ProfileEditScreen(
         }
     }
 
-    val unselectedSurface = Color(0xFFE6E8EC)
-    val primary = Color(0xFF1B5E20)
-    val accent = Color(0xFF4CAF50)
-    val softBackground = Color(0xFFE8F5E9)
-
     LayoutScreen(
         context = context,
         navigateToLogin = navigateToLogin,
@@ -76,7 +86,7 @@ fun ProfileEditScreen(
             Card(
                 shape = RoundedCornerShape(26.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = primary.copy(alpha = 0.12f)
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
                 )
             ) {
 
@@ -88,14 +98,14 @@ fun ProfileEditScreen(
                         text = stringResource(R.string.profile_edit_title),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = primary
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
 
                     Spacer(Modifier.height(6.dp))
 
                     Text(
                         text = stringResource(R.string.profile_edit_subtitle),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
             }
@@ -106,11 +116,7 @@ fun ProfileEditScreen(
                 value = state.firstName,
                 onValueChange = viewModel::onFirstNameChange,
                 label = { Text(stringResource(R.string.profile_first_name)) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = primary,
-                    focusedLabelColor = primary
-                )
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(14.dp))
@@ -119,11 +125,7 @@ fun ProfileEditScreen(
                 value = state.lastName,
                 onValueChange = viewModel::onLastNameChange,
                 label = { Text(stringResource(R.string.profile_last_name)) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = primary,
-                    focusedLabelColor = primary
-                )
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(18.dp))
@@ -151,12 +153,12 @@ fun ProfileEditScreen(
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor =
-                            if (isMale) primary
-                            else unselectedSurface,
+                            if (isMale) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant,
 
                         contentColor =
-                            if (isMale) Color.White
-                            else Color.Black
+                            if (isMale) MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
                     Text(stringResource(R.string.profile_gender_male))
@@ -169,12 +171,12 @@ fun ProfileEditScreen(
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor =
-                            if (isFemale) primary
-                            else unselectedSurface,
+                            if (isFemale) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant,
 
                         contentColor =
-                            if (isFemale) Color.White
-                            else Color.Black
+                            if (isFemale) MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 ) {
                     Text(stringResource(R.string.profile_gender_female))
@@ -222,14 +224,10 @@ fun ProfileEditScreen(
                         Icon(
                             Icons.Default.CalendarMonth,
                             contentDescription = null,
-                            tint = primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = primary,
-                    focusedLabelColor = primary
-                )
+                }
             )
 
             Spacer(Modifier.height(24.dp))
@@ -242,6 +240,51 @@ fun ProfileEditScreen(
                 )
 
                 Spacer(Modifier.height(10.dp))
+            }
+
+            Spacer(Modifier.height(24.dp))
+            // --- LOCAL PREFERENCES SECTION ---
+            Text(
+                "Preferencias de Interfaz",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            // Theme Mode
+            Text("Modo de Tema", style = MaterialTheme.typography.labelLarge)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ThemeMode.entries.forEach { mode ->
+                    FilterChip(
+                        selected = userPreferences.themeMode == mode,
+                        onClick = { mainViewModel.updateThemeMode(mode) },
+                        label = { Text(mode.name) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            // Contrast Level
+            Text("Nivel de Contraste", style = MaterialTheme.typography.labelLarge)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                ContrastLevel.entries.forEach { level ->
+                    FilterChip(
+                        selected = userPreferences.contrastLevel == level,
+                        onClick = { mainViewModel.updateContrastLevel(level) },
+                        label = { Text(level.name) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
 
             Spacer(Modifier.height(30.dp))
@@ -261,8 +304,8 @@ fun ProfileEditScreen(
                     shape = RoundedCornerShape(18.dp),
 
                     colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = Color(0xFF2E7D32).copy(alpha = 0.18f),
-                        contentColor = Color(0xFF81C784)
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer
                     )
                 ) {
 
@@ -300,8 +343,8 @@ fun ProfileEditScreen(
                     ),
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF43A047),
-                        disabledContainerColor = Color(0xFF43A047).copy(alpha = 0.45f)
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.45f)
                     )
                 ) {
 
@@ -309,7 +352,7 @@ fun ProfileEditScreen(
 
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             strokeWidth = 2.3.dp
                         )
 
@@ -328,7 +371,7 @@ fun ProfileEditScreen(
                             maxLines = 1,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -346,13 +389,13 @@ fun ProfileEditScreen(
                 ),
                 shape = RoundedCornerShape(30.dp),
 
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
 
                 icon = {
 
                     Surface(
                         shape = CircleShape,
-                        color = Color(0xFF43A047).copy(alpha = 0.14f),
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.size(72.dp)
                     ) {
 
@@ -363,7 +406,7 @@ fun ProfileEditScreen(
                             Icon(
                                 Icons.Default.Save,
                                 contentDescription = null,
-                                tint = Color(0xFF43A047),
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(36.dp)
                             )
                         }
@@ -409,7 +452,7 @@ fun ProfileEditScreen(
                         ),
 
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF43A047)
+                            containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
 

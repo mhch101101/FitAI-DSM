@@ -119,9 +119,6 @@ fun ProfileSetupContent(
     onSaveProfile: () -> Unit = {},
     context: android.content.Context? = null
 ) {
-    val primary = Color(0xFF00BFA6)
-    val unselectedSurface = Color(0xFFE6E8EC)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -134,8 +131,8 @@ fun ProfileSetupContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp),
-            color = primary,
-            trackColor = unselectedSurface,
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
             strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
         )
 
@@ -144,7 +141,7 @@ fun ProfileSetupContent(
         Text(
             text = stringResource(R.string.profile_step_indicator, state.currentStep),
             style = MaterialTheme.typography.labelLarge,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.End
         )
@@ -168,22 +165,17 @@ fun ProfileSetupContent(
                         onGenderChange = onGenderChange,
                         onWeightChange = onWeightChange,
                         onBirthDateSelected = onBirthDateSelected,
-                        context = context,
-                        primary = primary,
-                        unselectedSurface = unselectedSurface
+                        context = context
                     )
                     2 -> StepObjective(
                         state = state,
-                        onObjectiveChange = onObjectiveChange,
-                        primary = primary
+                        onObjectiveChange = onObjectiveChange
                     )
                     3 -> StepConfiguration(
                         state = state,
                         onLevelChange = onLevelChange,
                         onFrequencyChange = onFrequencyChange,
-                        onDurationChange = onDurationChange,
-                        primary = primary,
-                        unselectedSurface = unselectedSurface
+                        onDurationChange = onDurationChange
                     )
                 }
             }
@@ -203,11 +195,11 @@ fun ProfileSetupContent(
                     modifier = Modifier
                         .height(52.dp)
                         .weight(1f),
-                    border = BorderStroke(1.dp, primary)
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = primary)
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.size(8.dp))
-                    Text(stringResource(R.string.profile_back), color = primary)
+                    Text(stringResource(R.string.profile_back), color = MaterialTheme.colorScheme.primary)
                 }
                 Spacer(Modifier.size(16.dp))
             }
@@ -218,11 +210,11 @@ fun ProfileSetupContent(
                     .height(52.dp)
                     .weight(1f),
                 shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primary),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 enabled = !state.isLoading
             ) {
                 if (state.isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.White)
+                    CircularProgressIndicator(modifier = Modifier.size(18.dp), color = MaterialTheme.colorScheme.onPrimary)
                 } else {
                     val textRes = if (state.currentStep < 3) R.string.profile_continue else R.string.profile_finish
                     Text(stringResource(textRes), fontWeight = FontWeight.Bold)
@@ -244,19 +236,17 @@ fun StepPersonalData(
     onGenderChange: (String) -> Unit,
     onWeightChange: (String) -> Unit,
     onBirthDateSelected: (Long) -> Unit,
-    context: android.content.Context?,
-    primary: Color,
-    unselectedSurface: Color
+    context: android.content.Context?
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.profile_personal_data_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
-                color = primary
+                color = MaterialTheme.colorScheme.primary
             )
         )
-        Text(stringResource(R.string.profile_personal_data_subtitle), style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+        Text(stringResource(R.string.profile_personal_data_subtitle), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(24.dp))
 
         OutlinedTextField(
@@ -293,7 +283,7 @@ fun StepPersonalData(
         Text(
             stringResource(R.string.profile_gender_label),
             fontWeight = FontWeight.SemiBold,
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Spacer(Modifier.height(8.dp))
@@ -308,8 +298,8 @@ fun StepPersonalData(
                 onClick = { onGenderChange("Masculino") },
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isMale) primary else unselectedSurface,
-                    contentColor = if (isMale) Color.White else Color.Black
+                    containerColor = if (isMale) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = if (isMale) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 modifier = Modifier.weight(1f)
             ) {
@@ -320,8 +310,8 @@ fun StepPersonalData(
                 onClick = { onGenderChange("Femenino") },
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFemale) primary else unselectedSurface,
-                    contentColor = if (isFemale) Color.White else Color.Black
+                    containerColor = if (isFemale) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = if (isFemale) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 modifier = Modifier.weight(1f)
             ) { Text(stringResource(R.string.profile_gender_female)) }
@@ -330,7 +320,7 @@ fun StepPersonalData(
         Text(
             stringResource(R.string.profile_birth_date_label),
             fontWeight = FontWeight.SemiBold,
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
@@ -354,7 +344,7 @@ fun StepPersonalData(
                         calendar.get(java.util.Calendar.MONTH),
                         calendar.get(java.util.Calendar.DAY_OF_MONTH)
                     ).show()
-                }) { Icon(Icons.Default.CalendarMonth, null, tint = primary) }
+                }) { Icon(Icons.Default.CalendarMonth, null, tint = MaterialTheme.colorScheme.primary) }
             }
         )
 
@@ -362,7 +352,7 @@ fun StepPersonalData(
             Spacer(Modifier.height(16.dp))
             Text(
                 text = it,
-                color = Color.Red,
+                color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -372,18 +362,17 @@ fun StepPersonalData(
 @Composable
 fun StepObjective(
     state: ProfileSetupUiState,
-    onObjectiveChange: (String) -> Unit,
-    primary: Color
+    onObjectiveChange: (String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.profile_objective_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
-                color = primary
+                color = MaterialTheme.colorScheme.primary
             )
         )
-        Text(stringResource(R.string.profile_objective_subtitle), style = MaterialTheme.typography.bodyMedium, color = Color.Gray)
+        Text(stringResource(R.string.profile_objective_subtitle), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(24.dp))
 
         val objectives = listOf("Hipertrofia", "Fuerza", "Mixto")
@@ -400,9 +389,9 @@ fun StepObjective(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 shape = RoundedCornerShape(14.dp),
-                border = if (isSelected) BorderStroke(1.5.dp, primary) else CardDefaults.outlinedCardBorder(),
+                border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else CardDefaults.outlinedCardBorder(),
                 colors = CardDefaults.outlinedCardColors(
-                    containerColor = if (isSelected) primary.copy(alpha = 0.1f) else Color.Transparent
+                    containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent
                 )
             ) {
                 Row(
@@ -410,9 +399,18 @@ fun StepObjective(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RadioButton(selected = isSelected, onClick = { onObjectiveChange(objective) }, colors = RadioButtonDefaults.colors(selectedColor = primary))
+                    RadioButton(
+                        selected = isSelected,
+                        onClick = { onObjectiveChange(objective) },
+                        colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
+                    )
                     Spacer(Modifier.size(12.dp))
-                    Text(stringResource(objectiveNameRes), fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        stringResource(objectiveNameRes),
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+                    )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -428,7 +426,8 @@ fun StepObjective(
                         }
                         Text(
                             text = stringResource(descRes),
-                            modifier = Modifier.padding(10.dp)
+                            modifier = Modifier.padding(10.dp),
+                            color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
                         Spacer(Modifier.height(8.dp))
@@ -454,7 +453,7 @@ fun StepObjective(
 
         state.error?.let {
             Spacer(Modifier.height(16.dp))
-            Text(it, color = Color.Red, style = MaterialTheme.typography.bodyMedium)
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -464,22 +463,20 @@ fun StepConfiguration(
     state: ProfileSetupUiState,
     onLevelChange: (String) -> Unit,
     onFrequencyChange: (Int) -> Unit,
-    onDurationChange: (Int) -> Unit,
-    primary: Color,
-    unselectedSurface: Color
+    onDurationChange: (Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.profile_config_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
-                color = primary
+                color = MaterialTheme.colorScheme.primary
             )
         )
         Text(
             text = stringResource(R.string.profile_config_subtitle),
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(Modifier.height(32.dp))
 
@@ -502,8 +499,8 @@ fun StepConfiguration(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isSelected) primary else unselectedSurface,
-                        contentColor = if (isSelected) Color.White else Color.Black
+                        containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
@@ -516,7 +513,7 @@ fun StepConfiguration(
 
         // Días por semana
         Text(stringResource(R.string.profile_days_per_week), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-        Text(stringResource(R.string.profile_days_per_week_subtitle), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Text(stringResource(R.string.profile_days_per_week_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -529,8 +526,8 @@ fun StepConfiguration(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isSelected) primary else unselectedSurface,
-                        contentColor = if (isSelected) Color.White else Color.Black
+                        containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
@@ -543,7 +540,7 @@ fun StepConfiguration(
 
         // Duración de sesión
         Text(stringResource(R.string.profile_session_duration), fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-        Text(stringResource(R.string.profile_session_duration_subtitle), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Text(stringResource(R.string.profile_session_duration_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -556,8 +553,8 @@ fun StepConfiguration(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isSelected) primary else unselectedSurface,
-                        contentColor = if (isSelected) Color.White else Color.Black
+                        containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
@@ -568,7 +565,7 @@ fun StepConfiguration(
 
         state.error?.let {
             Spacer(Modifier.height(16.dp))
-            Text(it, color = Color.Red, style = MaterialTheme.typography.bodyMedium)
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
