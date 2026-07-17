@@ -51,21 +51,39 @@ fun LayoutScreen(
     }
 
     val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) viewModel.startStepTracking()
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        if (results[Manifest.permission.ACTIVITY_RECOGNITION] != false) {
+            viewModel.startStepTracking()
+        }
     }
 
     LaunchedEffect(Unit) {
-        // ACTIVITY_RECOGNITION is a runtime permission only from API 29 onwards.
-        val needsRequest = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+        val missingPermissions = buildList {
+            // ACTIVITY_RECOGNITION is a runtime permission only from API 29 onwards.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
                 ContextCompat.checkSelfPermission(
                     ctx,
                     Manifest.permission.ACTIVITY_RECOGNITION
                 ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                add(Manifest.permission.ACTIVITY_RECOGNITION)
+            }
 
-        if (needsRequest) {
-            permissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
+            // POST_NOTIFICATIONS is a runtime permission only from API 33 onwards,
+            // needed to show the "goal reached" notification from StepSyncWorker.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(
+                    ctx,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        if (missingPermissions.isNotEmpty()) {
+            permissionLauncher.launch(missingPermissions.toTypedArray())
         } else {
             viewModel.startStepTracking()
         }
