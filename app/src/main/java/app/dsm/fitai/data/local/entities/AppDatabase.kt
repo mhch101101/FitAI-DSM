@@ -15,7 +15,7 @@ import app.dsm.fitai.data.local.database.*
         ExerciseEntity::class,
         RoutineExerciseEntity::class
     ],
-    version = 4,
+    version = 5,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
