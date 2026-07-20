@@ -1,10 +1,17 @@
 package app.dsm.fitai.ui.screens.home
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
@@ -15,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.dsm.fitai.R
@@ -29,6 +37,8 @@ fun LayoutScreen(
     showStepsCard: Boolean = true,
     navigateToLogin: () -> Unit = {},
     navigateToProfileEdit: () -> Unit = {},
+    navigateToProgress: (() -> Unit)? = null,
+    onNavigateBack: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
 
@@ -38,21 +48,62 @@ fun LayoutScreen(
     val viewModel = remember {
         LayoutViewModel(
             userRepository = appComponent.userRepository(),
-            authRepository = appComponent.authRepository()
+            authRepository = appComponent.authRepository(),
+            stepRepository = appComponent.stepRepository(),
+            stepSensorManager = appComponent.provideStepSensorManager()
         )
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { results ->
+        if (results[Manifest.permission.ACTIVITY_RECOGNITION] != false) {
+            viewModel.startStepTracking()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val missingPermissions = buildList {
+            // ACTIVITY_RECOGNITION is a runtime permission only from API 29 onwards.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                ContextCompat.checkSelfPermission(
+                    ctx,
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                add(Manifest.permission.ACTIVITY_RECOGNITION)
+            }
+
+            // POST_NOTIFICATIONS is a runtime permission only from API 33 onwards,
+            // needed to show the "goal reached" notification from StepSyncWorker.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ContextCompat.checkSelfPermission(
+                    ctx,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        if (missingPermissions.isNotEmpty()) {
+            permissionLauncher.launch(missingPermissions.toTypedArray())
+        } else {
+            viewModel.startStepTracking()
+        }
     }
 
     val logoutEvent by viewModel.logoutEvent.collectAsState()
     val userName by viewModel.userName.collectAsState()
+    val todaySteps by viewModel.todaySteps.collectAsState(initial = null)
     LaunchedEffect(logoutEvent) {
         if (logoutEvent) navigateToLogin()
     }
 
     var showLogoutDialog by remember { mutableStateOf(false) }
 
-    val notificationsCount = 1
-    val steps = 8542
-    val stepsGoal = 10_000
+    val steps = todaySteps?.steps ?: 0
+    val stepsGoal = todaySteps?.goal ?: 8000
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -80,7 +131,28 @@ fun LayoutScreen(
                         )
                     }
                 },
+                navigationIcon = {
+                    if (onNavigateBack != null) {
+                        IconButton(onClick = { onNavigateBack() }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = stringResource(R.string.layout_back_desc),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                },
                 actions = {
+
+                    if (navigateToProgress != null) {
+                        IconButton(onClick = { navigateToProgress() }) {
+                            Icon(
+                                Icons.Default.BarChart,
+                                contentDescription = stringResource(R.string.layout_progress_desc),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
 
                     IconButton(onClick = {navigateToProfileEdit()}) {
                         Icon(

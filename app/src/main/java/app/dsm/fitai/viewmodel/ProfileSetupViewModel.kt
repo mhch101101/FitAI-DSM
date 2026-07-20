@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.dsm.fitai.domain.model.User
 import app.dsm.fitai.domain.repository.AuthRepository
+import app.dsm.fitai.domain.repository.StepRepository
 import app.dsm.fitai.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 class ProfileSetupViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val stepRepository: StepRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileSetupUiState())
     val uiState = _uiState.asStateFlow()
@@ -117,6 +119,11 @@ class ProfileSetupViewModel @Inject constructor(
                         trainingDuration = state.trainingDuration
                     )
                 )
+
+                // Set step goal based on objective (AI Logic)
+                val goal = stepRepository.getRecommendedGoal(state.selectedObjective)
+                stepRepository.setStepGoal(goal)
+
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     isCompleted = true
