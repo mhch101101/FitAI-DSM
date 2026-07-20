@@ -1,9 +1,11 @@
 package app.dsm.fitai.di
 
 import app.dsm.fitai.data.repository.AuthRepositoryImpl
+import app.dsm.fitai.data.repository.ChatRepositoryImpl
 import app.dsm.fitai.data.repository.RoutineRepositoryImpl
 import app.dsm.fitai.data.repository.UserRepositoryImpl
 import app.dsm.fitai.domain.repository.AuthRepository
+import app.dsm.fitai.domain.repository.ChatRepository
 import app.dsm.fitai.domain.repository.RoutineRepository
 import app.dsm.fitai.domain.repository.UserRepository
 import dagger.Binds
@@ -37,4 +39,8 @@ abstract class RepositoryModule {
         impl: app.dsm.fitai.data.repository.TrainingRepositoryImpl
     ): app.dsm.fitai.domain.repository.TrainingRepository
 
+    @Binds
+    abstract fun bindChatRepository(
+        impl: ChatRepositoryImpl
+    ): ChatRepository
 }

@@ -39,6 +39,7 @@ fun LayoutScreen(
     navigateToProfileEdit: () -> Unit = {},
     navigateToProgress: (() -> Unit)? = null,
     onNavigateBack: (() -> Unit)? = null,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
 
@@ -107,7 +108,7 @@ fun LayoutScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-
+        floatingActionButton = floatingActionButton,
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(

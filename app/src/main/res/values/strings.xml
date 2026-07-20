@@ -102,4 +102,9 @@
     <string name="profile_edit_success_message">Tus datos se guardaron correctamente y ya están disponibles en tu perfil.</string>
     <string name="profile_edit_cancel">Cancelar</string>
     <string name="profile_edit_save">Guardar</string>
+
+    <!-- Chat -->
+    <string name="chat_title">Asistente FitAI</string>
+    <string name="chat_hint">Escribe tu consulta...</string>
+    <string name="chat_button_desc">Abrir Chat con IA</string>
 </resources>

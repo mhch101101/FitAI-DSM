@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.work.*
+import app.dsm.fitai.data.manager.ReminderManager
 import app.dsm.fitai.data.worker.StepSyncWorker
 import app.dsm.fitai.data.worker.SyncWorker
 import java.util.concurrent.TimeUnit
@@ -21,7 +22,12 @@ class FitAIApp: Application() {
 
         scheduleSync()
         scheduleStepsSync()
+        scheduleTrainingReminders()
         createNotificationChannel()
+    }
+
+    private fun scheduleTrainingReminders() {
+        ReminderManager(this).scheduleDailyTrainingReminder(hour = 9, minute = 0)
     }
 
     private fun createNotificationChannel() {

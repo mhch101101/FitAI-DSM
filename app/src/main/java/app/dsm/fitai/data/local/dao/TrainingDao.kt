@@ -35,4 +35,7 @@ interface TrainingDao {
 
     @Query("SELECT COUNT(*) FROM training_sessions")
     suspend fun countSessions(): Int
+
+    @Query("SELECT COUNT(*) FROM training_sessions WHERE date >= :startOfDay AND date <= :endOfDay")
+    suspend fun hasSessionsInRange(startOfDay: Long, endOfDay: Long): Int
 }

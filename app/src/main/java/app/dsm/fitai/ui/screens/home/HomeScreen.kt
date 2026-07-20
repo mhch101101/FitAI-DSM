@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.*
@@ -28,7 +29,8 @@ import app.dsm.fitai.viewmodel.HomeViewModel
 fun HomeScreen(
     navigateToLogin: () -> Unit = {},
     navigateToProfileEdit: () -> Unit = {},
-    navigateToProgress: () -> Unit = {}
+    navigateToProgress: () -> Unit = {},
+    navigateToChat: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val appComponent = (context.applicationContext as FitAIApp).appComponent
@@ -51,7 +53,19 @@ fun HomeScreen(
         context = context,
         navigateToLogin = navigateToLogin,
         navigateToProfileEdit = navigateToProfileEdit,
-        navigateToProgress = navigateToProgress
+        navigateToProgress = navigateToProgress,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToChat,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.Chat,
+                    contentDescription = stringResource(R.string.chat_button_desc)
+                )
+            }
+        }
     ) {
         if (uiState.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

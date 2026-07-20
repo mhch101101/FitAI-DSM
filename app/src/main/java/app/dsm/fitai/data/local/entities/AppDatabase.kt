@@ -2,11 +2,7 @@ package app.dsm.fitai.data.local.entities
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import app.dsm.fitai.data.local.dao.UserDao
-import app.dsm.fitai.data.local.dao.RoutineDao
-import app.dsm.fitai.data.local.dao.ExerciseDao
-import app.dsm.fitai.data.local.dao.StepDao
-import app.dsm.fitai.data.local.dao.TrainingDao
+import app.dsm.fitai.data.local.dao.*
 import app.dsm.fitai.data.local.database.*
 
 @Database(
@@ -18,9 +14,10 @@ import app.dsm.fitai.data.local.database.*
         RoutineExerciseEntity::class,
         StepRecordEntity::class,
         TrainingSessionEntity::class,
-        TrainingLogEntity::class
+        TrainingLogEntity::class,
+        ChatEntity::class
     ],
-    version = 6,
+    version = 7,
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -28,4 +25,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
     abstract fun stepDao(): StepDao
     abstract fun trainingDao(): TrainingDao
+    abstract fun chatDao(): ChatDao
 }

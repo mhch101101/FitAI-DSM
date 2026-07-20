@@ -47,4 +47,9 @@ object DatabaseModule {
     fun provideTrainingDao(db: AppDatabase): app.dsm.fitai.data.local.dao.TrainingDao {
         return db.trainingDao()
     }
+
+    @Provides
+    fun provideChatDao(db: AppDatabase): app.dsm.fitai.data.local.dao.ChatDao {
+        return db.chatDao()
+    }
 }
